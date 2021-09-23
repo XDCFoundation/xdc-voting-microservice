@@ -1,27 +1,27 @@
 const mongoose = require("mongoose");
 
-const voteSchema = new mongoose.Schema({
-    pollingContract: { type: String, default: "" },
-    // polling contract is a proposal address.
-    voterAddress:{ type: String , default:"" },
-    support : {type : Boolean, default: null},
+const addressSchema = new mongoose.Schema({
+    address: { type: String, default: "" },
+    permission:{
+        allowVoting: { type: Boolean, default: true },
+        allowProposalCreation: { type: Boolean, default: false },
+        },
+    totalVotes: {type: Number , default:null},
     createdOn: { type: Number, default: Date.now() },
     updatedOn: { type: Number, default: Date.now() },
     isActive: { type: Boolean, default: true },
-    isDeleted: { type: Boolean, default: false }
+    isDeleted: { type: Boolean, default: false },
    
 });
 
-voteSchema.method({
+addressSchema.method({
     addData: async function () {
         return this.save()
     }
 });
 
-voteSchema.static({
-    getFilteredData: function (requestData, selectionKeys, offset, limit, sortingKey) {
-        return this.find(requestData, selectionKeys).sort(sortingKey).skip(parseInt(offset)).limit(parseInt(limit)).exec();
-    },
+addressSchema.static({
+
     findData: function (findObj) {
         return this.find(findObj)
     },
@@ -42,4 +42,4 @@ voteSchema.static({
         return this.count(findObj);
     }
 });
-module.exports = mongoose.model("votes", voteSchema);
+module.exports = mongoose.model("whiteListAddresses", addressSchema);

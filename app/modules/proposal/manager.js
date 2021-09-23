@@ -4,6 +4,7 @@ const Utils = require("../../utils");
 const { httpConstants, apiSuccessMessage,apiFailureMessage } = require("../../common/constants");
 const  proposalsSchema  = require("../../models/proposals")
 const  voteSchema  = require("../../models/votes")
+const  addressSchema = require("../../models/addresses")
 
 export default class BLManager {
 
@@ -20,7 +21,7 @@ export default class BLManager {
     //get-list-of-proposals
     async getProposalList(requestData) {
         try{
-          ;
+          
 
             return await proposalsSchema.find(requestData)
         }
@@ -40,7 +41,7 @@ export default class BLManager {
 
 
        
-          const addressDetails = await voteSchema.findData({ pollingContract: requestData.pollingContract });
+          const addressDetails = await voteSchema.find(requestData);
 
           if (!addressDetails) return Utils.handleError(addressDetails, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
 
@@ -84,7 +85,7 @@ export default class BLManager {
     async getProposalByAddress(requestData) {
        
        
-        const addressDetails = await proposalsSchema.findOne({ address: requestData.address });
+        const addressDetails = await proposalsSchema.findData({ pollingContract: requestData.pollingContract });
          if (!addressDetails) return Utils.handleError(addressDetails, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
         
         return await addressDetails
@@ -95,7 +96,15 @@ export default class BLManager {
     //getTotalProposalList
     async getTotalProposalList(requestData) {
         
-        return await proposalsSchema.find().count();
+        try{
+          
+
+            return await proposalsSchema.find(requestData).count()
+        }
+        catch(error){
+            console.log(error)
+        }
+       
 
         
     }

@@ -102,7 +102,7 @@ export default class proposalController {
         if (!req || !req.body || Object.keys(req.body).length < 1)
             return Utils.response(res, {}, apiFailureMessage.INVALID_REQUEST, httpConstants.RESPONSE_STATUS.FAILURE, httpConstants.RESPONSE_CODES.BAD_REQUEST);
     
-        let response = await new BLManager().getProposalByAddress(req.body).catch(err => {
+        let response = await new BLManager().getTotalProposalList(req.body).catch(err => {
             return Utils.response(res, { err }, apiFailureMessage.INTERNAL_SERVER_ERROR, httpConstants.RESPONSE_STATUS.FAILURE, httpConstants.RESPONSE_CODES.SERVER_ERROR);
         });
         if (!response)
