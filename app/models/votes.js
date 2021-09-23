@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 const voteSchema = new mongoose.Schema({
     pollingContract: { type: String, default: "" },
     // polling contract is a proposal address.
-    voterAddress:{ type: String , default:"" },
-    support : {type : Boolean, default: null},
+    voterAddress: { type: String, default: "" },
+    support: { type: Boolean, default: null },
     createdOn: { type: Number, default: Date.now() },
     updatedOn: { type: Number, default: Date.now() },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false }
-   
+
 });
 
 voteSchema.method({
