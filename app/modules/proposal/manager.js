@@ -29,7 +29,9 @@ export default class BLManager {
   //getlist-of-voters-for-proposal
   async getVotersListByProposal(requestData) {
     try {
-      const addressDetails = await voteSchema.find(requestData);
+        
+        
+     const addressDetails = await voteSchema.find(requestData);
 
       if (!addressDetails)
         return Utils.handleError(
@@ -39,14 +41,14 @@ export default class BLManager {
         );
 
       return await addressDetails;
-    } catch (error) {
-      console.log(error);
-    }
+     } catch (error) {
+       console.log(error);
+     }
   }
 
   //getProposalByDate
   async getProposalByDate(requestData) {
-    const addressDetails = await await proposalsSchema.findData({
+    const addressDetails = await  proposalsSchema.findData({
       createdOn: {
         $gte: requestData.startDate,
         $lte: requestData.endDate,
@@ -115,13 +117,5 @@ export default class BLManager {
     return await addressDetails;
   }
 
-  //getPaginatedProposalList
-  async getPaginatedProposalList(requestData) {
-    try {
-      const sort = { _id: -1 };
-      return await proposalsSchema.find(requestData).sort(sort);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  
 }
