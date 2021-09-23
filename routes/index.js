@@ -22,4 +22,14 @@ module.exports = (app) => {
     // ValidationManger.validateUserLogin,
     new Address().addAddress
   );
+  app.post(
+    "/get-address",
+    // ValidationManger.validateUserLogin,
+    new Address().getAddress
+  );
+  app.delete(
+    "/delete-address",
+    // ValidationManger.validateUserLogin,
+    new Address().getAddress
+  );
 };

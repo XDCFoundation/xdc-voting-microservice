@@ -9,60 +9,21 @@ import {
 // const {​ proposalsModel }​ = require("../../../libraries/common-models")
 // const { votesModel } = require("../../../libraries/common-models")
 
-import addressModel from "../../models/modelTemplate";
+import templateSchema from "../../models/modelTemplate";
+import { object } from "yup";
 
 export default class BLManager {
   ///add_whitelist_address
-  // async addAddress(requestData) {
-  //   //await validateRequest(requestData)
-  //   // Utils.lhtLog("addAddress", "addAddress started", Config.IS_CONSOLE_LOG, "SohelK")
-  //   //  Cloud Function business logic
-
-  //   const [error, isValid] = await UtilMethods.parseResponse(
-  //     validateRequest(requestData)
-  //   );
-  //   if (error)
-  //     throw Utils.errorResponse(
-  //       error,
-  //       error[0].message || apiFailureMessage.INVALID_REQUEST,
-  //       httpConstants.RESPONSE_CODES.FORBIDDEN
-  //     );
-
-  //   const clinicDeltais = await addressModel.findOneData({
-  //     address: requestData.address,
-  //   });
-  //   if (clinicDetails)
-  //     return Utils.errorResponse(
-  //       constants.modelMessage.DATA_EXIST,
-  //       constants.modelMessage.DATA_EXIST,
-  //       httpConstants.RESPONSE_CODES.NOT_FOUND
-  //     );
-  //   const addressDetailsObject = {
-  //     address: requestData.address,
-  //     permission: {
-  //       allowVoting: requestData.allowVoting,
-  //       allowProposalCreation: requestData.allowProposalCreation,
-  //     },
-  //   };
-  //   const clinicModelObject = new addressModel(addressDetailsObject);
-  //   const returnResponse = await clinicModelObject.addData();
-  //   return Utils.response(
-  //     returnResponse,
-  //     apiSuccessMessage.FETCH_SUCCESS,
-  //     httpConstants.RESPONSE_STATUS.SUCCESS,
-  //     httpConstants.RESPONSE_CODES.OK
-  //   );
-  // }
 
   addAddress = async (requestData) => {
     try {
-      let addressResponse = await addressModel.find({
+      let addressResponse = await templateSchema.find({
         address: requestData.address,
       });
       if (addressResponse && addressResponse.length) {
         throw apiFailureMessage.ADDRESS_ALREADY_EXISTS;
       }
-      let addressObj = new addressModel(requestData);
+      let addressObj = new templateSchema(requestData);
       // surveyObj.surveyId = surveyObj._id;
       return await addressObj.save();
     } catch (err) {
@@ -70,26 +31,97 @@ export default class BLManager {
     }
   };
 
-  async getAddresses(requestData) {
-    const addressDetails = await addressModel
-      .findData()
-      .limit(parseInt(requestData.limit));
+  async getAddress(requestData) {
+    const findObject = { isDeleted: false };
+    return await templateSchema.findData(
+      findObject,
+      requestData.limit,
+      requestData.skip
+    );
+    // console.log("=========", response);
+    // const addressDetails = await templateSchema
+    //   .findData(requestData)
+    //   .limit(parseInt(requestData.limit));
+    // if (!addressDetails)
+    //   throw Utils.handleError(
+    //     constants.modelMessage.DATA_EXIST,
+    //     constants.modelMessage.DATA_EXIST,
+    //     httpConstants.RESPONSE_CODES.NOT_FOUND
+    //   );
+    // const totalCount = await templateSchema.countData();
+    // console.log("this is ", totalCount);
+    // addressDetails["totalRecord"] = "testdata";
+    // return Utils.response(
+    //   addressDetails,
+    //   apiSuccessMessage.FETCH_SUCCESS,
+    //   httpConstants.RESPONSE_STATUS.SUCCESS,
+    //   httpConstants.RESPONSE_CODES.OK
+    // );
+  }
+  async deleteAddress(requestData) {
+    // await validateRequest(requestData);
 
+    // UtilMethods.lhtLog(
+    //   "deleteAddress",
+    //   "deleteAddress started",
+    //   Config.IS_CONSOLE_LOG,
+    //   "SohelK"
+    // );
+
+    //  Cloud Function business logic
+    const addressDetails = await addressModel.findOneData({
+      address: requestData.address,
+    });
     if (!addressDetails)
-      throw UtilMethods.errorResponse(
-        constants.modelMessage.DATA_EXIST,
-        constants.modelMessage.DATA_EXIST,
-        httpConstants.RESPONSE_CODES.NOT_FOUND
+      return Utils.handleError(
+        addressDetails,
+        constants.modelMessage.DATA_NOT_FOUND,
+        constants.httpConstants.RESPONSE_CODES.FORBIDDEN
       );
-    const totalCount = await addressModel.countData();
-    console.log("this is ", totalCount);
-    addressDetails["totalRecord"] = "testdata";
 
-    return UtilMethods.structuredResponse(
-      addressDetails,
-      apiSuccessMessage.FETCH_SUCCESS,
-      httpConstants.RESPONSE_STATUS.SUCCESS,
-      httpConstants.RESPONSE_CODES.OK
+    var returnResponse;
+    try {
+      returnResponse = await addressModel.findOneAndDelete({
+        address: requestData.address,
+      });
+    } catch (err) {
+      returnResponse = err;
+    }
+    return Utils.response(
+      returnResponse,
+      constants.apiSuccessMessage.FETCH_SUCCESS,
+      constants.httpConstants.RESPONSE_STATUS.SUCCESS,
+      constants.httpConstants.RESPONSE_CODES.OK
     );
   }
+  // async deleteFamilyMember(request) {
+  //   try {
+  //     if (!request)
+  //       throw Utils.error(
+  //         {},
+  //         apiFailureMessage.INVALID_PARAMS,
+  //         httpConstants.RESPONSE_CODES.FORBIDDEN
+  //       );
+  //     await UserModel.findOneAndUpdate(
+  //       {
+  //         "personalInfo.familyMembers": mongoose.Types.ObjectId(
+  //           request.memberId
+  //         ),
+  //       },
+  //       {
+  //         $pull: {
+  //           "personalInfo.familyMembers": mongoose.Types.ObjectId(
+  //             request.memberId
+  //           ),
+  //         },
+  //       }
+  //     );
+  //     await familyModel.findOneAndDelete({
+  //       memberId: request.memberId,
+  //     });
+  //     return {};
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

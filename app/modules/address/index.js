@@ -21,4 +21,34 @@ export default class FamilyController {
       httpConstants.RESPONSE_CODES.OK
     );
   }
+  async getAddress(request, response) {
+    const [error, getRes] = await Utils.parseResponse(
+      new BLManager().getAddress(request.body)
+    );
+    if (!getRes) {
+      return Utils.handleError(error, request, response);
+    }
+    return Utils.response(
+      response,
+      getRes,
+      apiSuccessMessage.FETCH_SUCCESS,
+      httpConstants.RESPONSE_STATUS.SUCCESS,
+      httpConstants.RESPONSE_CODES.OK
+    );
+  }
+  async deleteAddress(request, response) {
+    const [error, getRes] = await Utils.parseResponse(
+      new BLManager().deleteAddress(request.body)
+    );
+    if (!getRes) {
+      return Utils.handleError(error, request, response);
+    }
+    return Utils.response(
+      response,
+      getRes,
+      apiSuccessMessage.FETCH_SUCCESS,
+      httpConstants.RESPONSE_STATUS.SUCCESS,
+      httpConstants.RESPONSE_CODES.OK
+    );
+  }
 }

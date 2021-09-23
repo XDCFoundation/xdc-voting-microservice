@@ -21,10 +21,11 @@ templateSchema.method({
   },
 });
 templateSchema.static({
-  findData: function (findObj) {
-    return this.find(findObj);
+  findData: function (findObj, limit = 10, skip = 0) {
+    return this.find(findObj).limit(limit).skip(skip).sort({ addedOn: -1 });
   },
   findOneData: function (findObj) {
+    console.log("=========", findObj);
     return this.findOne(findObj);
   },
   findOneAndUpdateData: function (findObj, updateObj) {
@@ -36,6 +37,22 @@ templateSchema.static({
   },
   findDataWithAggregate: function (findObj) {
     return this.aggregate(findObj);
+  },
+  countData: function (findObj) {
+    return this.count(findObj);
+  },
+  getFilteredData: function (
+    requestData,
+    selectionKeys,
+    offset,
+    limit,
+    sortingKey
+  ) {
+    return this.find(requestData, selectionKeys)
+      .sort(sortingKey)
+      .skip(parseInt(offset))
+      .limit(parseInt(limit))
+      .exec();
   },
 });
 export default mongoose.model("whiteListAddresses", templateSchema);
