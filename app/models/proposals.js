@@ -23,11 +23,11 @@ proposalsSchema.method({
 
 proposalsSchema.static({
   getFilteredData: function (
-    requestData,
-    selectionKeys,
-    offset,
-    limit,
-    sortingKey
+    requestData={},
+    selectionKeys="",
+    offset=0,
+    limit=0,
+    sortingKey=0
   ) {
     return this.find(requestData, selectionKeys)
       .sort(sortingKey)

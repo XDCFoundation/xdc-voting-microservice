@@ -14,12 +14,24 @@ export default class BLManager {
   //xinfin-voting-add-new-proposal
   addProposal = async (requestData) => {
     const proposalsModelObject = new proposalsSchema(requestData);
+    if (!proposalsModelObject)
+      return Utils.handleError(
+        proposalsModelObject,
+        constants.modelMessage.DATA_NOT_FOUND,
+        constants.httpConstants.RESPONSE_CODES.FORBIDDEN
+      );
     return await proposalsModelObject.addData();
   };
 
   //get-list-of-proposals
   async getProposalList(requestData) {
     const proposalList = await proposalsSchema.find(requestData);
+    if (!proposalList)
+      return Utils.handleError(
+        proposalList,
+        constants.modelMessage.DATA_NOT_FOUND,
+        constants.httpConstants.RESPONSE_CODES.FORBIDDEN
+      );
 
     return proposalList;
   }
@@ -73,7 +85,7 @@ export default class BLManager {
   //getProposalByProposalAddress
   async getProposalByAddress(requestData) {
     const addressDetails = await proposalsSchema.findData({
-      pollingContract: requestData.pollingContract,
+      pollingContract: requestData.pollingContract
     });
     if (!addressDetails)
       return Utils.handleError(

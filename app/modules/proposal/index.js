@@ -87,14 +87,6 @@ export default class proposalController {
 
   //getVotersListByProposal
   async getVotersListByProposal(req, res) {
-    // if (!req || !req.body || Object.keys(req.body).length < 1)
-    //   return Utils.response(
-    //     res,
-    //     {},
-    //     apiFailureMessage.INVALID_REQUEST,
-    //     httpConstants.RESPONSE_STATUS.FAILURE,
-    //     httpConstants.RESPONSE_CODES.BAD_REQUEST
-    //   );
 
     let response = await new BLManager()
       .getVotersListByProposal(req.body)
@@ -248,14 +240,6 @@ export default class proposalController {
 
   //getTotalProposalList
   async getTotalProposalList(req, res) {
-    // if (!req || !req.body || Object.keys(req.body).length < 1)
-    //   return Utils.response(
-    //     res,
-    //     {},
-    //     apiFailureMessage.INVALID_REQUEST,
-    //     httpConstants.RESPONSE_STATUS.FAILURE,
-    //     httpConstants.RESPONSE_CODES.BAD_REQUEST
-    //   );
 
     let response = await new BLManager()
       .getTotalProposalList(req.body)
