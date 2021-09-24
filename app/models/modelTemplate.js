@@ -6,6 +6,7 @@ const templateSchema = new mongoose.Schema({
     allowVoting: { type: Boolean, default: true },
     allowProposalCreation: { type: Boolean, default: false },
   },
+
   totalVotes: { type: Number, default: null },
   createdOn: { type: Number, default: Date.now() },
   updatedOn: { type: Number, default: Date.now() },
@@ -24,6 +25,7 @@ templateSchema.static({
   findData: function (findObj, limit = 10, skip = 0) {
     return this.find(findObj).limit(limit).skip(skip).sort({ addedOn: -1 });
   },
+
   findOneData: function (findObj) {
     console.log("=========", findObj);
     return this.findOne(findObj);
@@ -41,6 +43,11 @@ templateSchema.static({
   countData: function (findObj) {
     return this.count(findObj);
   },
+
+  deleteData: function (findObj) {
+    return this.deleteOne(findObj);
+  },
+
   getFilteredData: function (
     requestData,
     selectionKeys,

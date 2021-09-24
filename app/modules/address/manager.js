@@ -16,28 +16,33 @@ export default class BLManager {
   ///add_whitelist_address
 
   addAddress = async (requestData) => {
-    try {
-      let addressResponse = await templateSchema.find({
-        address: requestData.address,
-      });
-      if (addressResponse && addressResponse.length) {
-        throw apiFailureMessage.ADDRESS_ALREADY_EXISTS;
-      }
-      let addressObj = new templateSchema(requestData);
-      // surveyObj.surveyId = surveyObj._id;
-      return await addressObj.save();
-    } catch (err) {
-      throw err;
-    }
+    // try {
+    //   let addressResponse = await templateSchema.find({
+    //     address: requestData.address,
+    //   });
+    //   if (addressResponse && addressResponse.length) {
+    //     throw apiFailureMessage.ADDRESS_ALREADY_EXISTS;
+    //   }
+    //   let addressObj = new templateSchema(requestData);
+    //   // surveyObj.surveyId = surveyObj._id;
+    //   return await addressObj.saveData();
+    // } catch (err) {
+    //   throw err;
+    // }
+    const proposalsModelObject = new templateSchema(requestData);
+
+    return await proposalsModelObject.saveData();
   };
 
   async getAddress(requestData) {
     const findObject = { isDeleted: false };
-    return await templateSchema.findData(
+    const countData = await templateSchema.countData();
+    const allAddress = await templateSchema.findData(
       findObject,
       requestData.limit,
       requestData.skip
     );
+    return { countData: countData, allAddress: allAddress };
     // console.log("=========", response);
     // const addressDetails = await templateSchema
     //   .findData(requestData)
@@ -58,17 +63,42 @@ export default class BLManager {
     //   httpConstants.RESPONSE_CODES.OK
     // );
   }
-  async deleteAddress(requestData) {
-    // await validateRequest(requestData);
-
+  async deleteAddress(request) {
+    if (!request)
+      throw Utils.error(
+        {},
+        apiFailureMessage.INVALID_PARAMS,
+        httpConstants.RESPONSE_CODES.FORBIDDEN
+      );
+    return templateSchema.findOneAndDelete(
+      {
+        address: request.address,
+      },
+      {
+        $set: {
+          isActive: 0,
+          isDeleted: 1,
+        },
+      }
+    );
+  }
+  async updateAddress(requestData) {
     // UtilMethods.lhtLog(
-    //   "deleteAddress",
-    //   "deleteAddress started",
+    //   "updateAddress",
+    //   "updateAddress started",
     //   Config.IS_CONSOLE_LOG,
     //   "SohelK"
     // );
+    const [error, isValid] = await Utils.parseResponse(
+      validateRequest(requestData)
+    );
+    if (error)
+      return Utils.errorResponse(
+        error,
+        error[0].message || apiFailureMessage.INVALID_REQUEST,
+        httpConstants.RESPONSE_CODES.FORBIDDEN
+      );
 
-    //  Cloud Function business logic
     const addressDetails = await addressModel.findOneData({
       address: requestData.address,
     });
@@ -78,50 +108,23 @@ export default class BLManager {
         constants.modelMessage.DATA_NOT_FOUND,
         constants.httpConstants.RESPONSE_CODES.FORBIDDEN
       );
-
-    var returnResponse;
-    try {
-      returnResponse = await addressModel.findOneAndDelete({
-        address: requestData.address,
-      });
-    } catch (err) {
-      returnResponse = err;
-    }
-    return Utils.response(
+    const updateObject = {
+      address: requestData.updateAddress,
+      permission: {
+        allowVoting: requestData.allowVoting,
+        allowProposalCreation: requestData.allowProposalCreation,
+      },
+      totalVotes: requestData.totalVotes,
+    };
+    const returnResponse = await addressModel.updateData(
+      { address: requestData.address },
+      updateObject
+    );
+    return Utils.Response(
       returnResponse,
-      constants.apiSuccessMessage.FETCH_SUCCESS,
-      constants.httpConstants.RESPONSE_STATUS.SUCCESS,
-      constants.httpConstants.RESPONSE_CODES.OK
+      apiSuccessMessage.FETCH_SUCCESS,
+      httpConstants.RESPONSE_STATUS.SUCCESS,
+      httpConstants.RESPONSE_CODES.OK
     );
   }
-  // async deleteFamilyMember(request) {
-  //   try {
-  //     if (!request)
-  //       throw Utils.error(
-  //         {},
-  //         apiFailureMessage.INVALID_PARAMS,
-  //         httpConstants.RESPONSE_CODES.FORBIDDEN
-  //       );
-  //     await UserModel.findOneAndUpdate(
-  //       {
-  //         "personalInfo.familyMembers": mongoose.Types.ObjectId(
-  //           request.memberId
-  //         ),
-  //       },
-  //       {
-  //         $pull: {
-  //           "personalInfo.familyMembers": mongoose.Types.ObjectId(
-  //             request.memberId
-  //           ),
-  //         },
-  //       }
-  //     );
-  //     await familyModel.findOneAndDelete({
-  //       memberId: request.memberId,
-  //     });
-  //     return {};
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 }

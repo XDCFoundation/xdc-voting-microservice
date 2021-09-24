@@ -30,6 +30,11 @@ module.exports = (app) => {
   app.delete(
     "/delete-address",
     // ValidationManger.validateUserLogin,
-    new Address().getAddress
+    new Address().deleteAddress
+  );
+  app.update(
+    "/update-address",
+    // ValidationManger.validateUserLogin,
+    new Address().updateAddress
   );
 };
