@@ -18,7 +18,7 @@ class Server {
           "listen",
           `Server Started on port ${Config.PORT}`,
           {},
-          "AyushK",
+          "sushmita",
           httpConstants.LOG_LEVEL_TYPE.INFO
         );
         routes(app);
@@ -29,7 +29,7 @@ class Server {
           "listen",
           "failed to connect",
           { err: error },
-          "AyushK",
+          "sushmita",
           httpConstants.LOG_LEVEL_TYPE.ERROR
         )
       );

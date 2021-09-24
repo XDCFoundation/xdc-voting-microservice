@@ -19,36 +19,28 @@ export default class BLManager {
 
   //get-list-of-proposals
   async getProposalList(requestData) {
-    try {
-      return await proposalsSchema.find(requestData);
-    } catch (error) {
-      console.log(error);
-    }
+    const proposalList = await proposalsSchema.find(requestData);
+
+    return proposalList;
   }
 
   //getlist-of-voters-for-proposal
   async getVotersListByProposal(requestData) {
-    try {
-        
-        
-     const addressDetails = await voteSchema.find(requestData);
+    const addressDetails = await voteSchema.find(requestData);
 
-      if (!addressDetails)
-        return Utils.handleError(
-          addressDetails,
-          constants.modelMessage.DATA_NOT_FOUND,
-          constants.httpConstants.RESPONSE_CODES.FORBIDDEN
-        );
+    if (!addressDetails)
+      return Utils.handleError(
+        addressDetails,
+        constants.modelMessage.DATA_NOT_FOUND,
+        constants.httpConstants.RESPONSE_CODES.FORBIDDEN
+      );
 
-      return await addressDetails;
-     } catch (error) {
-       console.log(error);
-     }
+    return await addressDetails;
   }
 
   //getProposalByDate
   async getProposalByDate(requestData) {
-    const addressDetails = await  proposalsSchema.findData({
+    const addressDetails = await proposalsSchema.findData({
       createdOn: {
         $gte: requestData.startDate,
         $lte: requestData.endDate,
@@ -94,12 +86,8 @@ export default class BLManager {
   }
 
   //getTotalProposalList
-  async getTotalProposalList(requestData) {
-    try {
-      return await proposalsSchema.find(requestData).count();
-    } catch (error) {
-      console.log(error);
-    }
+  async getTotalProposalList() {
+    return await proposalsSchema.find().count();
   }
 
   //getTotalPassedProposal
@@ -117,5 +105,13 @@ export default class BLManager {
     return await addressDetails;
   }
 
-  
+  //getPaginatedProposalList
+  async getPaginatedProposalList(requestData) {
+    try {
+      const sort = { _id: -1 };
+      return await proposalsSchema.find(requestData).sort(sort);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
