@@ -52,7 +52,7 @@ module.exports = (app) => {
     // ValidationManger.validateUserLogin,
     new Address().getTotalCastVotes
   );
-  app.get(
+  app.post(
     "/searchProposalUsingName",
     // ValidationManger.validateUserLogin,
     new Address().searchProposalUsingName

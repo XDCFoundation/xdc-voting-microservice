@@ -1,24 +1,19 @@
 import Utils from "../../utils";
-// const {​ validateRequest }​ = require("./validation");
-
 import {
   httpConstants,
   apiSuccessMessage,
   apiFailureMessage,
 } from "../../common/constants";
-// const {​ proposalsModel }​ = require("../../../libraries/common-models")
-// const { voteSchema } = require("../../../libraries/common-models")
 
 import templateSchema from "../../models/modelTemplate";
 import voteSchema from "../../models/votes";
-import { object } from "yup";
 import proposalsSchema from "../../models/proposals";
+
 export default class BLManager {
   ///add_whitelist_address
 
   addAddress = async (requestData) => {
     const proposalsModelObject = new templateSchema(requestData);
-
     return await proposalsModelObject.saveData();
   };
 
@@ -51,6 +46,7 @@ export default class BLManager {
     //   httpConstants.RESPONSE_CODES.OK
     // );
   }
+
   async deleteAddress(request) {
     if (!request)
       throw Utils.error(
@@ -122,22 +118,6 @@ export default class BLManager {
   }
 
   async getVotingPercentage(responseData) {
-    // Utils.lhtLog(
-    //   "getVotingPercentage",
-    //   "getVotingPercentage started",
-    //   Config.IS_CONSOLE_LOG,
-    //   "SohelK"
-    // );
-    // const [error, isValid] = await Utils.parseResponse(
-    //   validateRequest(requestData)
-    // );
-    // if (error)
-    //   return Utils.handleError(
-    //     error,
-    //     error[0].message || apiFailureMessage.INVALID_REQUEST,
-    //     httpConstants.RESPONSE_CODES.FORBIDDEN
-    //   );
-
     const notSupported = await voteSchema.countData({ support: false });
     const Supported = await voteSchema.countData({ support: true });
     const totalVotes = notSupported + Supported;
@@ -189,35 +169,20 @@ export default class BLManager {
   }
 
   async getTotalCastVotes(requestData) {
-    // const addressDetails = await voteSchema.countData();
-    // if (!addressDetails)
-    //   return Utils.errorResponse(
-    //     addressDetails,
-    //     constants.modelMessage.DATA_NOT_FOUND,
-    //     constants.httpConstants.RESPONSE_CODES.FORBIDDEN
-    //   );
-    // return Utils.response(
-    //   addressDetails,
-    //   apiSuccessMessage.FETCH_SUCCESS,
-    //   httpConstants.RESPONSE_STATUS.SUCCESS,
-    //   httpConstants.RESPONSE_CODES.OK
-    // );
+    const countD = await voteSchema
+      .find({ totalVotes: requestData.totalVotes })
+      .count();
+    // const allAddress = await voteSchema.findData({
+    //   totalVotes: requestData.totalVotes,
+    // });
+    // return { countData: countD, allAddress: allAddress };
+    return { countData: countD };
   }
+
   async searchProposalUsingName(requestData) {
-    const returnResponse = await proposalsSchema.find({
+    const countD = await proposalsSchema.find({
       proposalTitle: requestData.proposalTitle,
     });
-    if (!returnResponse)
-      return Utils.errorResponse(
-        returnResponse,
-        constants.modelMessage.DATA_NOT_FOUND,
-        constants.httpConstants.RESPONSE_CODES.FORBIDDEN
-      );
-    return Utils.response(
-      returnResponse,
-      apiSuccessMessage.FETCH_SUCCESS,
-      httpConstants.RESPONSE_STATUS.SUCCESS,
-      httpConstants.RESPONSE_CODES.OK
-    );
+    return { countData: countD };
   }
 }
