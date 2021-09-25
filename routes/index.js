@@ -32,9 +32,29 @@ module.exports = (app) => {
     // ValidationManger.validateUserLogin,
     new Address().deleteAddress
   );
-  app.update(
+  app.put(
     "/update-address",
     // ValidationManger.validateUserLogin,
     new Address().updateAddress
+  );
+  app.get(
+    "/getVotingPercentage",
+    // ValidationManger.validateUserLogin,
+    new Address().getVotingPercentage
+  );
+  app.get(
+    "/getAllVotersForProposal",
+    // ValidationManger.validateUserLogin,
+    new Address().getAllVotersForProposal
+  );
+  app.get(
+    "/getTotalCastVotes",
+    // ValidationManger.validateUserLogin,
+    new Address().getTotalCastVotes
+  );
+  app.get(
+    "/searchProposalUsingName",
+    // ValidationManger.validateUserLogin,
+    new Address().searchProposalUsingName
   );
 };
