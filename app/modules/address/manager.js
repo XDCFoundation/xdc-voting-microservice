@@ -180,9 +180,11 @@ export default class BLManager {
   }
 
   async searchProposalUsingName(requestData) {
-    const countD = await proposalsSchema.find({
-      proposalTitle: requestData.proposalTitle,
-    });
-    return { countData: countD };
+    if (!requestData || !requestData.proposalTitle)
+      throw "proposal title missing";
+    const findObj = {
+      proposalTitle: { $regex: requestData.proposalTitle, $options: "i" },
+    };
+    return await proposalsSchema.find(findObj);
   }
 }
