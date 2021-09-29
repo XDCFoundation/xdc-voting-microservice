@@ -62,4 +62,4 @@ templateSchema.static({
       .exec();
   },
 });
-export default mongoose.model("whiteListAddresses", templateSchema);
+export default mongoose.model("vs_whiteListAddresses", templateSchema);

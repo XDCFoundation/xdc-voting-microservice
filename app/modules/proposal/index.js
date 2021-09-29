@@ -22,41 +22,15 @@ export default class proposalController {
     //get-list-of-proposals
     async getProposalList(req, res) {
         if (!req || !req.body || Object.keys(req.body).length < 1)
-            return Utils.response(
-                res,
-                {},
-                apiFailureMessage.INVALID_REQUEST,
-                httpConstants.RESPONSE_STATUS.FAILURE,
-                httpConstants.RESPONSE_CODES.BAD_REQUEST
-            );
+            return Utils.response(res, {}, apiFailureMessage.INVALID_REQUEST, httpConstants.RESPONSE_STATUS.FAILURE, httpConstants.RESPONSE_CODES.BAD_REQUEST);
 
-        let response = await new BLManager()
-            .getProposalList(req.body)
-            .catch((err) => {
-                return Utils.response(
-                    res,
-                    {err},
-                    apiFailureMessage.INTERNAL_SERVER_ERROR,
-                    httpConstants.RESPONSE_STATUS.FAILURE,
-                    httpConstants.RESPONSE_CODES.SERVER_ERROR
-                );
+        let response = await new BLManager().getProposalList(req.body).catch((err) => {
+                return Utils.handleError(res, err, apiFailureMessage.INTERNAL_SERVER_ERROR, httpConstants.RESPONSE_STATUS.FAILURE, httpConstants.RESPONSE_CODES.SERVER_ERROR);
             });
         if (!response)
-            return Utils.response(
-                res,
-                {},
-                apiFailureMessage.NOT_FOUND,
-                httpConstants.RESPONSE_STATUS.FAILURE,
-                httpConstants.RESPONSE_CODES.NOT_FOUND
-            );
+            return Utils.response(res, {}, apiFailureMessage.INTERNAL_SERVER_ERROR, httpConstants.RESPONSE_STATUS.FAILURE, httpConstants.RESPONSE_CODES.NOT_FOUND);
 
-        return Utils.response(
-            res,
-            response,
-            apiSuccessMessage.ADD_SUCCESS,
-            httpConstants.RESPONSE_STATUS.SUCCESS,
-            httpConstants.RESPONSE_CODES.OK
-        );
+        return Utils.response(res, response, apiSuccessMessage.GET_PROPOSALS_SUCCESS, httpConstants.RESPONSE_STATUS.SUCCESS, httpConstants.RESPONSE_CODES.OK);
     }
 
     //getVotersListByProposal
