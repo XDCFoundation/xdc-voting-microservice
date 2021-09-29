@@ -6,8 +6,7 @@ module.exports = {
     const schema = yup.object().shape({
       proposalTitle: yup.string().required(),
       startDate: yup.string().required(),
-      //endDate: yup.date().required(),
-      
+      endDate: yup.date().required(),
       pollingContract : yup.string().required(),
       status : yup.string().required()
     })
