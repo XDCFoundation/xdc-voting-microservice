@@ -107,6 +107,9 @@ export default class BLManager {
     const addressDetails = await proposalsSchema.findData({
       pollingContract: "passed",
     });
+    const countPassedProposal = await proposalsSchema.findData({
+      pollingContract: "passed",
+    }).count();
     if (!addressDetails)
       return Utils.handleError(
         addressDetails,
@@ -114,7 +117,7 @@ export default class BLManager {
         constants.httpConstants.RESPONSE_CODES.FORBIDDEN
       );
 
-    return await addressDetails;
+    return await {addressDetails,countPassedProposal};
   }
 
   //getPaginatedProposalList
