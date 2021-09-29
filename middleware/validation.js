@@ -13,7 +13,7 @@ module.exports = {
 };
 
 module.exports = {
-  validateUserLogin: async (req, res, next) => {
+  validateAddProposal: async (req, res, next) => {
     const schema = yup.object().shape({
       email: yup.string().email(),
       password: yup.string().min(8).required(),
