@@ -25,6 +25,8 @@ module.exports = (app) => {
   app.get("/getPassedProposal", new Proposal().getPassedProposal);
   app.get("/getTotalProposalList", new Proposal().getTotalProposalList);
   app.get("/getPaginatedProposalList", new Proposal().getPaginatedProposalList);
+  app.get("/getListOfAddress",new Proposal().getListOfAddress);
+  app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
 
   // app.get("/test-route", ValidationManger.validateUserLogin, new TestModule().testRoute);
 };

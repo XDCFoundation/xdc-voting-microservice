@@ -129,4 +129,15 @@ export default class BLManager {
       console.log(error);
     }
   }
+
+
+  async getListOfAddress(){
+    return await addressSchema.find().skip(0).limit(10);
+  }
+
+  //get-list-of-whitelisted-address
+  async getListOfWhitelistedAddress(){
+    const sort = {createdOn:-1};
+    return await addressSchema.find().sort(sort).skip(0).limit(10);
+  }
 }
