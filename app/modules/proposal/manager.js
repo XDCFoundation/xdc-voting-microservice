@@ -140,4 +140,14 @@ export default class BLManager {
     const sort = {createdOn:-1};
     return await addressSchema.find().sort(sort).skip(0).limit(10);
   }
+
+
+  //getSingleProposalDetail
+  async getSingleProposalDetail(requestData){
+    const sort = {_id:-1};
+    return await proposalsSchema.find(
+      {proposalTitle : requestData.proposalTitle}
+      )
+      .sort(sort)
+  }
 }
