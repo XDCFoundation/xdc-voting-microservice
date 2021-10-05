@@ -104,6 +104,9 @@ export default class BLManager {
     const addressDetails = await proposalsSchema.findData({
       pollingContract: "passed",
     });
+    const countPassedProposal = await proposalsSchema.findData({
+      pollingContract: "passed",
+    }).count();
     if (!addressDetails)
       return Utils.handleError(
         addressDetails,
@@ -111,7 +114,7 @@ export default class BLManager {
         constants.httpConstants.RESPONSE_CODES.FORBIDDEN
       );
 
-    return await addressDetails;
+    return await {addressDetails,countPassedProposal};
   }
 
   //getPaginatedProposalList
@@ -122,5 +125,26 @@ export default class BLManager {
     } catch (error) {
       console.log(error);
     }
+  }
+
+
+  async getListOfAddress(){
+    return await addressSchema.find().skip(0).limit(10);
+  }
+
+  //get-list-of-whitelisted-address
+  async getListOfWhitelistedAddress(){
+    const sort = {createdOn:-1};
+    return await addressSchema.find().sort(sort).skip(0).limit(10);
+  }
+
+
+  //getSingleProposalDetail
+  async getSingleProposalDetail(requestData){
+    const sort = {_id:-1};
+    return await proposalsSchema.find(
+      {proposalTitle : requestData.proposalTitle}
+      )
+      .sort(sort)
   }
 }
