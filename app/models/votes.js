@@ -19,11 +19,11 @@ voteSchema.method({
 
 voteSchema.static({
   getFilteredData: function (
-    requestData={},
-    selectionKeys="",
-    offset=0,
-    limit=0,
-    sortingKey=1
+    requestData,
+    selectionKeys,
+    offset,
+    limit,
+    sortingKey
   ) {
     return this.find(requestData, selectionKeys)
       .sort(sortingKey)

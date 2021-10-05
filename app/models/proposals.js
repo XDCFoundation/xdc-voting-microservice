@@ -1,15 +1,12 @@
 const mongoose = require("mongoose");
 
 const proposalsSchema = new mongoose.Schema({
-  //address: { type: String, default: "" },
   proposalTitle: { type: String, default: "" },
-  startDate: { type: Date, default: Date.now() },
-  endDate: { type: Date, default: Date.now() },
+  startDate: { type: Number, default: Date.now() },
+  endDate: { type: Number, default: Date.now() },
   description: { type: String, default: "" },
-  filePath: { type: String, default: "" },
-  /* Polling contract is propsal address address. */
+  proposalDocuments: [{ type: String, default: "" }],
   pollingContract: { type: String, default: "" },
-  /* Status values are [open, passed, failed] */
   status: { type: String, default: "open" },
   createdOn: { type: Number, default: Date.now() },
   updatedOn: { type: Number, default: Date.now() },

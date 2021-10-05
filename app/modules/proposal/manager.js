@@ -27,11 +27,8 @@ export default class BLManager {
   async getProposalList(requestData) {
     const proposalList = await proposalsSchema.find(requestData);
     if (!proposalList)
-      return Utils.handleError(
-        proposalList,
-        constants.modelMessage.DATA_NOT_FOUND,
-        constants.httpConstants.RESPONSE_CODES.FORBIDDEN
-      );
+      throw ""
+      return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
 
     return proposalList;
   }
