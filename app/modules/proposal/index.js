@@ -416,9 +416,9 @@ export default class proposalController {
 
 
   //getSingleProposalDetail
-  async getSingleProposalDetail(req, res) {
+  async getProposalDetail(req, res) {
     let response = await new BLManager()
-      .getSingleProposalDetail(req.body)
+      .getProposalDetail(req.params)
       .catch((err) => {
         return Utils.response(
           res,
