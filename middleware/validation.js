@@ -23,7 +23,7 @@ module.exports = {
   
   validateProposalDetail: async (req, res, next) => {
     const schema = yup.object().shape({
-      _id: yup.string().required(),
+      proposalId: yup.string().required(),
     })
     await validate(schema, req.params, res, next, req)
   },

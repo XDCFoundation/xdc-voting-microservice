@@ -142,10 +142,10 @@ export default class BLManager {
   //getSingleProposalDetail
   async getProposalDetail(requestData){
     
-    return await proposalsSchema.find(
-      {_id : requestData._id}
+    return await proposalsSchema.findOne(
+      {_id : requestData.proposalId}
       )
-      .limit(1)
+      
     
   }
 }
