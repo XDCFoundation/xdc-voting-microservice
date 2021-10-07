@@ -23,12 +23,12 @@ module.exports = (app) => {
   app.post("/add-proposal", ValidationManger.validateAddProposal, new Proposal().addProposal);
   app.get("/getProposalList", new Proposal().getProposalList);
   app.get("/getVotersListByProposal", new Proposal().getVotersListByProposal);
-  app.post("/getProposalByDate", new Proposal().getProposalByDate);
-  app.post("/getProposalByStatus", new Proposal().getProposalByStatus);
-  app.post("/getProposalByAddress", new Proposal().getProposalByAddress);
+  app.get("/getProposalByDate", new Proposal().getProposalByDate);
+  app.get("/getProposalByStatus", new Proposal().getProposalByStatus);
+  app.get("/getProposalByAddress", new Proposal().getProposalByAddress);
   app.get("/getPassedProposal", new Proposal().getPassedProposal);
   app.get("/getTotalProposalList", new Proposal().getTotalProposalList);
-  app.post("/getPaginatedProposalList", new Proposal().getPaginatedProposalList);
+  app.get("/getPaginatedProposalList", new Proposal().getPaginatedProposalList);
   app.get("/getListOfAddress",new Proposal().getListOfAddress);
   app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
   app.get("/getProposalDetail/:proposalId",ValidationManger.validateProposalDetail,new Proposal().getProposalDetail);
