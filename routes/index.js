@@ -31,7 +31,7 @@ module.exports = (app) => {
   app.get("/getPaginatedProposalList", new Proposal().getPaginatedProposalList);
   app.get("/getListOfAddress",new Proposal().getListOfAddress);
   app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
-  app.get("/getSingleProposalDetail",new Proposal().getSingleProposalDetail);
+  app.get("/getProposalDetail/:proposalId",ValidationManger.validateProposalDetail,new Proposal().getProposalDetail);
 
   // app.get("/test-route", ValidationManger.validateUserLogin, new TestModule().testRoute);
 };

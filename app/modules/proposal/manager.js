@@ -140,11 +140,12 @@ export default class BLManager {
 
 
   //getSingleProposalDetail
-  async getSingleProposalDetail(requestData){
-    const sort = {_id:-1};
-    return await proposalsSchema.find(
-      {proposalTitle : requestData.proposalTitle}
+  async getProposalDetail(requestData){
+    
+    return await proposalsSchema.findOne(
+      {_id : requestData.proposalId}
       )
-      .sort(sort)
+      
+    
   }
 }
