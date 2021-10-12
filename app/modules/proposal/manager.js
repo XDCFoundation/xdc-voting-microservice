@@ -144,4 +144,13 @@ export default class BLManager {
 
 
     }
+
+    async searchbyaddess(requestData) {
+
+        return await addressSchema.findOne(
+            {address: requestData.address}
+        )
+
+
+    }
 }
