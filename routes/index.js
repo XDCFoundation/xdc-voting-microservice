@@ -32,6 +32,8 @@ module.exports = (app) => {
   app.get("/getListOfAddress",new Proposal().getListOfAddress);
   app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
   app.get("/getProposalDetail/:proposalId",ValidationManger.validateProposalDetail,new Proposal().getProposalDetail);
+  app.get("/searchbyaddess/:address",ValidationManger.validatesearchbyaddess,new Proposal().searchbyaddess);
+  
 
   // app.get("/test-route", ValidationManger.validateUserLogin, new TestModule().testRoute);
 };
