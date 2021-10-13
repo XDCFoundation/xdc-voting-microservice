@@ -187,4 +187,22 @@ export default class BLManager {
     };
     return await proposalsSchema.find(findObj);
   }
+
+  castProposalVote = async (requestData) => {
+    try {
+      let votersResponse = await voteSchema({
+        pollingContract: requestData.pollingContract,
+        voterAddress: requestData.voterAddress,
+        support: requestData.support,
+      });
+      if (votersResponse && votersResponse.length) {
+        throw apiFailureMessage.SURVEY_ALREADY_EXISTS;
+      }
+      let surveyObj = new voteSchema(requestData);
+      surveyObj.surveyId = surveyObj._id;
+      return await surveyObj.save();
+    } catch (err) {
+      throw err;
+    }
+  };
 }

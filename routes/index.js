@@ -5,6 +5,7 @@ import * as ValidationManger from "../middleware/validation";
 import { stringConstants } from "../app/common/constants";
 import Address from "../app/modules/address";
 import Proposal from "../app/modules/proposal";
+import votes from "../app/models/votes";
 
 module.exports = (app) => {
   app.get("/", (req, res) => res.send(stringConstants.SERVICE_STATUS_HTML));
@@ -33,7 +34,8 @@ module.exports = (app) => {
   app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
   app.get("/getProposalDetail/:proposalId",ValidationManger.validateProposalDetail,new Proposal().getProposalDetail);
   app.get("/searchbyaddess/:address",ValidationManger.validatesearchbyaddess,new Proposal().searchbyaddess);
-  
+  app.post("/castProposalVote", new Address().castProposalVote);
+
 
   // app.get("/test-route", ValidationManger.validateUserLogin, new TestModule().testRoute);
 };
