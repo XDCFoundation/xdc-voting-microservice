@@ -70,16 +70,8 @@ export default class BLManager {
     async updateAddress(request) {
         try {
             if (!request || !request.address)
-                throw Utils.error(
-                    {},
-
-                    apiFailureMessage.INVALID_PARAMS,
-
-                    httpConstants.RESPONSE_CODES.FORBIDDEN
-                );
-
+                throw Utils.error({}, apiFailureMessage.INVALID_PARAMS, httpConstants.RESPONSE_CODES.FORBIDDEN);
             let addressDetails = {modifiedOn: new Date().getTime()};
-
             if (request.address) addressDetails["address"] = request.updateAddress;
             if (request.permission) {
                 let permission = {};
@@ -93,10 +85,7 @@ export default class BLManager {
             }
             if (request.totalVotes) addressDetails["totalVotes"] = request.totalVotes;
 
-            let findData = templateSchema.findOne({
-                address: request.address,
-            });
-
+            let findData = templateSchema.findOne({address: request.address,});
             if (!findData) {
                 throw "No such address exists";
             }
@@ -118,8 +107,10 @@ export default class BLManager {
     }
 
     async getVotingPercentage(responseData) {
-        const notSupported = await VoteSchema.countData({support: false});
-        const Supported = await VoteSchema.countData({support: true});
+        if(!responseData.proposalId)
+            throw "proposalId is required"
+        const notSupported = await VoteSchema.countData({support: false, pollingContract: responseData.proposalId});
+        const Supported = await VoteSchema.countData({support: true, pollingContract: responseData.proposalId});
         const totalVotes = notSupported + Supported;
 
         let supportpercentage = {
