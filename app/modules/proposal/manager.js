@@ -139,7 +139,7 @@ export default class BLManager {
     async getProposalDetail(requestData) {
 
         return await proposalsSchema.findOne(
-            {_id: requestData.proposalId}
+            {pollingContract: requestData.proposalId}
         )
 
 
