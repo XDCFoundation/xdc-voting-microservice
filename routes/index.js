@@ -21,11 +21,7 @@ module.exports = (app) => {
   /**
    * route definition
    */
-  app.post(
-    "/add-proposal",
-    ValidationManger.validateAddProposal,
-    new Proposal().addProposal
-  );
+  app.post("/add-proposal", ValidationManger.validateAddProposal, new Proposal().addProposal);
   app.get("/getProposalList", new Proposal().getProposalList);
   app.get("/getVotersListByProposal", new Proposal().getVotersListByProposal);
   app.get("/getProposalByDate", new Proposal().getProposalByDate);
@@ -34,21 +30,12 @@ module.exports = (app) => {
   app.get("/getPassedProposal", new Proposal().getPassedProposal);
   app.get("/getTotalProposalList", new Proposal().getTotalProposalList);
   app.get("/getPaginatedProposalList", new Proposal().getPaginatedProposalList);
-  app.get("/getListOfAddress", new Proposal().getListOfAddress);
-  app.get(
-    "/getListOfWhitelistedAddress",
-    new Proposal().getListOfWhitelistedAddress
-  );
-  app.get("/getSingleProposalDetail", new Proposal().getSingleProposalDetail);
+  app.get("/getListOfAddress",new Proposal().getListOfAddress);
+  app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
+  app.get("/getProposalDetail/:proposalId",ValidationManger.validateProposalDetail,new Proposal().getProposalDetail);
+  app.get("/searchbyaddess/:address",ValidationManger.validatesearchbyaddess,new Proposal().searchbyaddess);
   app.post("/castProposalVote", new Address().castProposalVote);
 
-  // app.get("/getListOfAddress",new Proposal().getListOfAddress);
-  // app.get("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);
-  app.get(
-    "/getProposalDetail/:proposalId",
-    ValidationManger.validateProposalDetail,
-    new Proposal().getProposalDetail
-  );
 
   // app.get("/test-route", ValidationManger.validateUserLogin, new TestModule().testRoute);
 };
