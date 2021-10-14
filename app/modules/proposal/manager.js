@@ -22,18 +22,6 @@ export default class BLManager {
     //get-list-of-proposals
     async getProposalList(requestData) {
 
-        // const sort = {createdOn: -1};
-        // const countData= await proposalsSchema.count()
-        // const list=await proposalsSchema.find()
-        // .skip(parseInt(requestData.skip))
-        // .limit(parseInt(requestData.limit))
-        // .sort(sort)
-        // if (!proposalList)
-        // throw ""
-
-        // return await {count:countData,
-        //     dataList:list
-        // }
         const countData= await proposalsSchema.count()
         const proposalList = await proposalsSchema.find()
         .skip(parseInt(requestData.skip))
