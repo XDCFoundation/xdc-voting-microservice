@@ -21,15 +21,28 @@ export default class BLManager {
 
     //get-list-of-proposals
     async getProposalList(requestData) {
+
+        // const sort = {createdOn: -1};
+        // const countData= await proposalsSchema.count()
+        // const list=await proposalsSchema.find()
+        // .skip(parseInt(requestData.skip))
+        // .limit(parseInt(requestData.limit))
+        // .sort(sort)
+        // if (!proposalList)
+        // throw ""
+
+        // return await {count:countData,
+        //     dataList:list
+        // }
+        const countData= await proposalsSchema.count()
         const proposalList = await proposalsSchema.find()
         .skip(parseInt(requestData.skip))
         .limit(parseInt(requestData.limit))
         
-        if (!proposalList)
-            throw ""
+       
         //return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
 
-        return proposalList;
+        return {proposalList, countData};
     }
 
     //getlist-of-voters-for-proposal
@@ -134,9 +147,17 @@ export default class BLManager {
     //get-list-of-whitelisted-address
     async getListOfWhitelistedAddress(requestData) {
         const sort = {createdOn: -1};
-        return await addressSchema.find()
+        const countData= await addressSchema.count()
+        const list=await addressSchema.find()
         .skip(parseInt(requestData.skip))
-        .limit(parseInt(requestData.limit));
+        .limit(parseInt(requestData.limit))
+        .sort(sort)
+
+
+        return await {count:countData,
+            dataList:list
+        }
+        
     }
 
 
