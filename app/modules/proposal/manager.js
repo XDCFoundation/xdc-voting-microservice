@@ -21,10 +21,13 @@ export default class BLManager {
 
     //get-list-of-proposals
     async getProposalList(requestData) {
-        const proposalList = await proposalsSchema.find(requestData);
+        const proposalList = await proposalsSchema.find()
+        .skip(parseInt(requestData.skip))
+        .limit(parseInt(requestData.limit))
+        
         if (!proposalList)
             throw ""
-        return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
+        //return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
 
         return proposalList;
     }
@@ -129,9 +132,11 @@ export default class BLManager {
     }
 
     //get-list-of-whitelisted-address
-    async getListOfWhitelistedAddress() {
+    async getListOfWhitelistedAddress(requestData) {
         const sort = {createdOn: -1};
-        return await addressSchema.find().sort(sort).skip(0).limit(10);
+        return await addressSchema.find()
+        .skip(parseInt(requestData.skip))
+        .limit(parseInt(requestData.limit));
     }
 
 
