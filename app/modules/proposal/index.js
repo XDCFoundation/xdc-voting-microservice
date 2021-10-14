@@ -19,14 +19,7 @@ export default class proposalController {
 
     //get-list-of-proposals
     async getProposalList(req, res) {
-        if (!req || !req.body || Object.keys(req.body).length < 1)
-            return Utils.response(
-                res,
-                {},
-                apiFailureMessage.INVALID_REQUEST,
-                httpConstants.RESPONSE_STATUS.FAILURE,
-                httpConstants.RESPONSE_CODES.BAD_REQUEST
-            );
+       
 
         let response = await new BLManager()
             .getProposalList(req.body)
