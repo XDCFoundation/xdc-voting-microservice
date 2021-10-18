@@ -4,7 +4,7 @@ const voteSchema = new mongoose.Schema({
   pollingContract: { type: String, default: "" },
   // polling contract is a proposal address.
   voterAddress: { type: String, default: "" },
-  support: { type: Boolean, default: null },
+  support: { type: Boolean, default: "" },
   createdOn: { type: Number, default: Date.now() },
   updatedOn: { type: Number, default: Date.now() },
   isActive: { type: Boolean, default: true },
