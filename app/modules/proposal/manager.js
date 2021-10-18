@@ -100,6 +100,10 @@ export default class BLManager {
         return await proposalsSchema.find().count();
     }
 
+    async getvoterList() {
+        return await voteSchema.find().sort({_id: -1});
+    }
+
     //getTotalPassedProposal
     async getPassedProposal() {
         const addressDetails = await proposalsSchema.findData({
@@ -168,4 +172,7 @@ export default class BLManager {
 
 
     }
+
+
+    
 }

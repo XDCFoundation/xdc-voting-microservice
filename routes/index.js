@@ -13,7 +13,7 @@ module.exports = (app) => {
   app.post("/get-address", new Address().getAddress);
   app.delete("/delete-address", new Address().deleteAddress);
   app.put("/update-address", new Address().updateAddress);
-  app.get("/getVotingPercentage", new Address().getVotingPercentage);
+  app.get("/getVotingPercentage/:proposalId", new Address().getVotingPercentage);
   app.get("/getAllVotersForProposal", new Address().getAllVotersForProposal);
   app.get("/getTotalCastVotes", new Address().getTotalCastVotes);
   app.post("/searchProposalUsingName", new Address().searchProposalUsingName);
@@ -29,6 +29,7 @@ module.exports = (app) => {
   app.get("/getProposalByAddress", new Proposal().getProposalByAddress);
   app.get("/getPassedProposal", new Proposal().getPassedProposal);
   app.get("/getTotalProposalList", new Proposal().getTotalProposalList);
+  app.get("/getvoterList", new Proposal().getvoterList);
   app.get("/getPaginatedProposalList", new Proposal().getPaginatedProposalList);
   app.get("/getListOfAddress",new Proposal().getListOfAddress);
   app.post("/getListOfWhitelistedAddress",new Proposal().getListOfWhitelistedAddress);

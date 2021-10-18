@@ -235,6 +235,43 @@ export default class proposalController {
         );
     }
 
+
+
+    async getvoterList(req, res) {
+
+        let response = await new BLManager()
+            .getvoterList(req.body)
+            .catch((err) => {
+                return Utils.response(
+                    res,
+                    {err},
+                    apiFailureMessage.INTERNAL_SERVER_ERROR,
+                    httpConstants.RESPONSE_STATUS.FAILURE,
+                    httpConstants.RESPONSE_CODES.SERVER_ERROR
+                );
+            });
+        if (!response)
+            return Utils.response(
+                res,
+                {},
+                apiFailureMessage.NOT_FOUND,
+                httpConstants.RESPONSE_STATUS.FAILURE,
+                httpConstants.RESPONSE_CODES.NOT_FOUND
+            );
+
+        return Utils.response(
+            res,
+            response,
+            apiSuccessMessage.ADD_SUCCESS,
+            httpConstants.RESPONSE_STATUS.SUCCESS,
+            httpConstants.RESPONSE_CODES.OK
+        );
+    }
+
+
+
+
+
     //getTotalPassedProposal
     async getPassedProposal(req, res) {
         if (!req || !req.body || Object.keys(req.body).length < 1)

@@ -68,7 +68,7 @@ export default class FamilyController {
   }
   async getVotingPercentage(request, response) {
     const [error, getRes] = await Utils.parseResponse(
-      new BLManager().getVotingPercentage(request.body)
+      new BLManager().getVotingPercentage(request.params)
     );
     if (!getRes) {
       return Utils.handleError(error, request, response);
