@@ -111,14 +111,20 @@ export default class BLManager {
             throw "proposalId is required"
         const notSupported = await VoteSchema.countData({support: false, pollingContract: responseData.proposalId});
         const Supported = await VoteSchema.countData({support: true, pollingContract: responseData.proposalId});
-        const totalVotes = notSupported + Supported;
-
+        let totalVotes = notSupported + Supported;
+        if(totalVotes==0){
+            totalVotes=totalVotes+1
+        }
+        let voteSupport=Supported / totalVotes
+        let voteNotSupport=notSupported / totalVotes
+        
+        
         let supportpercentage = {
-            yes: (Supported / totalVotes) * 100,
-            No: (notSupported / totalVotes) * 100,
+            yes: voteSupport * 100,
+            No: voteNotSupport * 100,
         };
 
-        return supportpercentage;
+        return {supportpercentage};
     }
 
     async getAllVotersForProposal(requestData) {
