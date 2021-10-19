@@ -71,13 +71,16 @@ export default class BLManager {
         const proposalDetails = await proposalsSchema.findData({
             status: requestData.status,
         });
+        const countPRoposal = await proposalsSchema.findData({
+            status: requestData.status,
+        }).count()
         if (!proposalDetails)
             return Utils.handleError(
                 proposalDetails,
                 constants.modelMessage.DATA_NOT_FOUND,
                 constants.httpConstants.RESPONSE_CODES.FORBIDDEN
             );
-        return await proposalDetails;
+        return await {proposalDetails,countPRoposal};
     }
 
     //getProposalByProposalAddress

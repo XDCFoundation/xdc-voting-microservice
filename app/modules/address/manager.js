@@ -150,7 +150,11 @@ export default class BLManager {
         const findObj = {
             proposalTitle: {$regex: requestData.proposalTitle, $options: "i"},
         };
-        return proposalsSchema.find(findObj);
+        return proposalsSchema.find(findObj)
+        .skip(parseInt(requestData.skip))
+        .limit(parseInt(requestData.limit))
+        .sort({createdOn: -1})
+;
     }
 
     castProposalVote = async (requestData) => {
