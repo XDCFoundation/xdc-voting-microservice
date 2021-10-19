@@ -136,7 +136,7 @@ export default class FamilyController {
     return Utils.response(
       response,
       getRes,
-      apiSuccessMessage.FETCH_SUCCESS,
+      "voted successfully",
       httpConstants.RESPONSE_STATUS.SUCCESS,
       httpConstants.RESPONSE_CODES.OK
     );
