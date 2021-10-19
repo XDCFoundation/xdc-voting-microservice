@@ -174,5 +174,20 @@ export default class BLManager {
     }
 
 
+    // async deleteProposal(request) {
+    //     if (!request)
+    //         throw Utils.error(
+    //             {},
+    //             apiFailureMessage.INVALID_PARAMS,
+    //             httpConstants.RESPONSE_CODES.FORBIDDEN
+    //         );
+    //     return proposalsSchema.deleteOne(
+    //         {
+    //             pollingContract: request.proposalId,
+    //         }
+    //     );
+    // }
+
+
     
 }
