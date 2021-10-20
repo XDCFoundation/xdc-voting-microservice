@@ -144,19 +144,6 @@ export default class BLManager {
         return {countData: countD};
     }
 
-    async searchProposalUsingName(requestData) {
-        if (!requestData || !requestData.proposalTitle)
-            throw "proposal title missing";
-        const findObj = {
-            proposalTitle: {$regex: requestData.proposalTitle, $options: "i"},
-        };
-        return proposalsSchema.find(findObj)
-        .skip(parseInt(requestData.skip))
-        .limit(parseInt(requestData.limit))
-        .sort({createdOn: -1})
-;
-    }
-
     castProposalVote = async (requestData) => {
         let votersResponse = await VoteSchema.findData({
             pollingContract: requestData.pollingContract,

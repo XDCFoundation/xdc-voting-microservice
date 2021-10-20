@@ -21,65 +21,60 @@ export default class BLManager {
 
     //get-list-of-proposals
     async getProposalList(requestData) {
-        const sort = {createdOn: -1};
         const countData = await proposalsSchema.count()
-        const proposalList = await proposalsSchema.find()
-            .skip(parseInt(requestData.skip))
-            .limit(parseInt(requestData.limit))
-            .sort(sort)
-
-        // return proposalsSchema.aggregate([
-        //     {
-        //         $lookup: {
-        //             from: "votes",
-        //             localField: "pollingContract",
-        //             foreignField: "pollingContract",
-        //             as: "yesVotes"
-        //         },
-        //     },
-        //     {
-        //         "$addFields": {
-        //             "yesVotes":
-        //                     {
-        //                         "$filter": {
-        //                             "input": "$yesVotes",
-        //                             "as": "yesVotes",
-        //                             "cond": {
-        //                                 "$eq": [ "$$yesVotes.support", true ]
-        //                             }
-        //                         }
-        //                     }
-        //         }
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: "votes",
-        //             localField: "pollingContract",
-        //             foreignField: "pollingContract",
-        //             as: "noVotes"
-        //         },
-        //     },
-        //     {
-        //         "$addFields": {
-        //             "noVotes":
-        //                 {
-        //                     "$filter": {
-        //                         "input": "$noVotes",
-        //                         "as": "noVotes",
-        //                         "cond": {
-        //                             "$eq": [ "$$noVotes.support", false ]
-        //                         }
-        //                     }
-        //                 }
-        //         }
-        //     },
-        //     { "$sort":{createdOn: -1}},
-        //     { "$skip": requestData.skip },
-        //     { "$limit":requestData.limit }
-        // ])
-
-        //return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
-         return {proposalList, countData};
+        const query = [
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "pollingContract",
+                    foreignField: "pollingContract",
+                    as: "yesVotes"
+                },
+            },
+            {
+                "$addFields": {
+                    "yesVotes":
+                        {
+                            "$filter": {
+                                "input": "$yesVotes",
+                                "as": "yesVotes",
+                                "cond": {
+                                    "$eq": ["$$yesVotes.support", true]
+                                }
+                            }
+                        }
+                }
+            },
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "pollingContract",
+                    foreignField: "pollingContract",
+                    as: "noVotes"
+                },
+            },
+            {
+                "$addFields": {
+                    "noVotes":
+                        {
+                            "$filter": {
+                                "input": "$noVotes",
+                                "as": "noVotes",
+                                "cond": {
+                                    "$eq": ["$$noVotes.support", false]
+                                }
+                            }
+                        }
+                }
+            },
+            {"$sort": {createdOn: -1}},
+            {"$skip": Number(requestData.skip)},
+            {"$limit": Number(requestData.limit)}
+        ]
+        if(requestData.proposalTitle)
+            query.push({$match:{proposalTitle:{ "$regex": requestData.proposalTitle, "$options": "i" }}})
+        const proposalList = await proposalsSchema.aggregate(query)
+        return {proposalList, countData};
     }
 
     //getlist-of-voters-for-proposal

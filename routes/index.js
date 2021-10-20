@@ -16,7 +16,6 @@ module.exports = (app) => {
   app.get("/getVotingPercentage/:proposalId", new Address().getVotingPercentage);
   app.get("/getAllVotersForProposal", new Address().getAllVotersForProposal);
   app.get("/getTotalCastVotes", new Address().getTotalCastVotes);
-  app.post("/searchProposalUsingName", new Address().searchProposalUsingName);
 
   /**
    * route definition
