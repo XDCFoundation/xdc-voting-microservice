@@ -21,17 +21,65 @@ export default class BLManager {
 
     //get-list-of-proposals
     async getProposalList(requestData) {
-        const sort = {createdOn: -1};
-        const countData= await proposalsSchema.count()
-        const proposalList = await proposalsSchema.find()
-        .skip(parseInt(requestData.skip))
-        .limit(parseInt(requestData.limit))
-        .sort(sort)
-        
-       
-        //return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
+        // const sort = {createdOn: -1};
+        // const countData = await proposalsSchema.count()
+        // const proposalList = await proposalsSchema.find()
+        //     .skip(parseInt(requestData.skip))
+        //     .limit(parseInt(requestData.limit))
+        //     .sort(sort)
 
-        return {proposalList, countData};
+        return proposalsSchema.aggregate([
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "pollingContract",
+                    foreignField: "pollingContract",
+                    as: "yesVotes"
+                },
+            },
+            {
+                "$addFields": {
+                    "yesVotes":
+                            {
+                                "$filter": {
+                                    "input": "$yesVotes",
+                                    "as": "yesVotes",
+                                    "cond": {
+                                        "$eq": [ "$$yesVotes.support", true ]
+                                    }
+                                }
+                            }
+                }
+            },
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "pollingContract",
+                    foreignField: "pollingContract",
+                    as: "noVotes"
+                },
+            },
+            {
+                "$addFields": {
+                    "noVotes":
+                        {
+                            "$filter": {
+                                "input": "$noVotes",
+                                "as": "noVotes",
+                                "cond": {
+                                    "$eq": [ "$$noVotes.support", false ]
+                                }
+                            }
+                        }
+                }
+            },
+            { "$sort":{createdOn: -1}},
+            { "$skip": requestData.skip },
+            { "$limit":requestData.limit }
+        ])
+
+        //return Utils.handleError(proposalList, constants.modelMessage.DATA_NOT_FOUND, constants.httpConstants.RESPONSE_CODES.FORBIDDEN);
+        // return {proposalList, countData};
     }
 
     //getlist-of-voters-for-proposal
@@ -80,7 +128,7 @@ export default class BLManager {
                 constants.modelMessage.DATA_NOT_FOUND,
                 constants.httpConstants.RESPONSE_CODES.FORBIDDEN
             );
-        return await {proposalDetails,countPRoposal};
+        return await {proposalDetails, countPRoposal};
     }
 
     //getProposalByProposalAddress
@@ -143,17 +191,18 @@ export default class BLManager {
     //get-list-of-whitelisted-address
     async getListOfWhitelistedAddress(requestData) {
         const sort = {createdOn: -1};
-        const countData= await addressSchema.count()
-        const list=await addressSchema.find()
-        .skip(parseInt(requestData.skip))
-        .limit(parseInt(requestData.limit))
-        .sort(sort)
+        const countData = await addressSchema.count()
+        const list = await addressSchema.find()
+            .skip(parseInt(requestData.skip))
+            .limit(parseInt(requestData.limit))
+            .sort(sort)
 
 
-        return await {count:countData,
-            dataList:list
+        return await {
+            count: countData,
+            dataList: list
         }
-        
+
     }
 
 
@@ -192,5 +241,4 @@ export default class BLManager {
     // }
 
 
-    
 }
