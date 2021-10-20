@@ -116,9 +116,11 @@ export default class BLManager {
 
     //getProposalByStatus
     async getProposalByStatus(requestData) {
-        const proposalDetails = await proposalsSchema.findData({
+        const proposalDetails = await proposalsSchema.find({
             status: requestData.status,
-        });
+        })
+        .skip(parseInt(requestData.skip))
+        .limit(parseInt(requestData.limit))
         const countPRoposal = await proposalsSchema.findData({
             status: requestData.status,
         }).count()

@@ -25,7 +25,7 @@ module.exports = (app) => {
   app.post("/getProposalList", new Proposal().getProposalList);
   app.get("/getVotersListByProposal", new Proposal().getVotersListByProposal);
   app.get("/getProposalByDate", new Proposal().getProposalByDate);
-  app.get("/getProposalByStatus", new Proposal().getProposalByStatus);
+  app.post("/getProposalByStatus", new Proposal().getProposalByStatus);
   app.get("/getProposalByAddress", new Proposal().getProposalByAddress);
   app.get("/getPassedProposal", new Proposal().getPassedProposal);
   app.get("/getTotalProposalList", new Proposal().getTotalProposalList);
