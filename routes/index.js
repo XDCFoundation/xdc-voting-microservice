@@ -11,7 +11,7 @@ module.exports = (app) => {
   app.get("/", (req, res) => res.send(stringConstants.SERVICE_STATUS_HTML));
   app.post("/add-address", new Address().addAddress);
   app.post("/get-address", new Address().getAddress);
-  app.delete("/delete-address", new Address().deleteAddress);
+  app.post("/delete-address", new Address().deleteAddress);
   app.put("/update-address", new Address().updateAddress);
   app.get("/getVotingPercentage/:proposalId", new Address().getVotingPercentage);
   app.get("/getAllVotersForProposal", new Address().getAllVotersForProposal);
