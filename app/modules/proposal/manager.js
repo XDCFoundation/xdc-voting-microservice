@@ -21,7 +21,7 @@ export default class BLManager {
 
     //get-list-of-proposals
     async getProposalList(requestData) {
-        const countData = await proposalsSchema.count()
+        // const countData = await proposalsSchema.count()
         const query = [
             {
                 $lookup: {
@@ -67,14 +67,28 @@ export default class BLManager {
                         }
                 }
             },
-            {"$sort": {createdOn: -1}},
-            {"$skip": Number(requestData.skip)},
-            {"$limit": Number(requestData.limit)}
+            {"$sort": {createdOn: -1}}
         ]
-        if(requestData.proposalTitle)
-            query.push({$match:{proposalTitle:{ "$regex": requestData.proposalTitle, "$options": "i" }}})
+        if (requestData.proposalTitle)
+            query.push({$match: {proposalTitle: {"$regex": requestData.proposalTitle, "$options": "i"}}})
+
+        if (requestData.status && requestData.status === 'Open')
+            query.push({$match: {endDate: {"$gte": Date.now()}}})
+
+        if (requestData.status && requestData.status === 'Closed')
+            query.push({$match: {endDate: {"$lte": Date.now()}}})
+
+        if (requestData.startTime && requestData.endTime)
+            query.push({$match: {startDate: {"$gte": requestData.startTime, $lte: requestData.endTime}}})
+
+
+        const countQuery = [...query, {$count: "totalCount"}]
+        const countData = await proposalsSchema.aggregate(countQuery)
+
+        query.push({"$skip": Number(requestData.skip)})
+        query.push({"$limit": Number(requestData.limit)})
         const proposalList = await proposalsSchema.aggregate(query)
-        return {proposalList, countData};
+        return {proposalList, countData: countData[0].totalCount};
     }
 
     //getlist-of-voters-for-proposal
@@ -114,8 +128,8 @@ export default class BLManager {
         const proposalDetails = await proposalsSchema.find({
             status: requestData.status,
         })
-        .skip(parseInt(requestData.skip))
-        .limit(parseInt(requestData.limit))
+            .skip(parseInt(requestData.skip))
+            .limit(parseInt(requestData.limit))
         const countPRoposal = await proposalsSchema.findData({
             status: requestData.status,
         }).count()
@@ -182,7 +196,7 @@ export default class BLManager {
 
 
     async getListOfAddress() {
-        return await addressSchema.find().skip(0).limit(10);
+        return addressSchema.find().skip(0).limit(10);
     }
 
     //get-list-of-whitelisted-address
@@ -193,49 +207,72 @@ export default class BLManager {
             .skip(parseInt(requestData.skip))
             .limit(parseInt(requestData.limit))
             .sort(sort)
-
-
-        return await {
-            count: countData,
-            dataList: list
-        }
-
+        return {count: countData, dataList: list}
     }
 
 
     //getSingleProposalDetail
     async getProposalDetail(requestData) {
 
-        return await proposalsSchema.findOne(
-            {pollingContract: requestData.proposalId}
-        )
+        const query = [
+            {
+                $match: {pollingContract: requestData.proposalId}
+            },
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "pollingContract",
+                    foreignField: "pollingContract",
+                    as: "yesVotes"
+                },
+            },
+            {
+                "$addFields": {
+                    "yesVotes":
+                        {
+                            "$filter": {
+                                "input": "$yesVotes",
+                                "as": "yesVotes",
+                                "cond": {
+                                    "$eq": ["$$yesVotes.support", true]
+                                }
+                            }
+                        }
+                }
+            },
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "pollingContract",
+                    foreignField: "pollingContract",
+                    as: "noVotes"
+                },
+            },
+            {
+                "$addFields": {
+                    "noVotes":
+                        {
+                            "$filter": {
+                                "input": "$noVotes",
+                                "as": "noVotes",
+                                "cond": {
+                                    "$eq": ["$$noVotes.support", false]
+                                }
+                            }
+                        }
+                }
+            },
+            {"$sort": {createdOn: -1}}
+        ]
 
-
+        const proposalList = await proposalsSchema.aggregate(query)
+        if (proposalList && proposalList.length)
+            return proposalList[0];
+        return {}
+        // return proposalsSchema.findOne({pollingContract: requestData.proposalId})
     }
 
     async searchbyaddess(requestData) {
-
-        return await addressSchema.findOne(
-            {address: requestData.address}
-        )
-
-
+        return addressSchema.findOne({address: requestData.address})
     }
-
-
-    // async deleteProposal(request) {
-    //     if (!request)
-    //         throw Utils.error(
-    //             {},
-    //             apiFailureMessage.INVALID_PARAMS,
-    //             httpConstants.RESPONSE_CODES.FORBIDDEN
-    //         );
-    //     return proposalsSchema.deleteOne(
-    //         {
-    //             pollingContract: request.proposalId,
-    //         }
-    //     );
-    // }
-
-
 }
