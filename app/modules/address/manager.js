@@ -138,9 +138,7 @@ export default class BLManager {
     }
 
     async getTotalCastVotes(requestData) {
-        const countD = await VoteSchema
-            .find({totalVotes: requestData.totalVotes})
-            .count();
+        const countD = await VoteSchema.find().count();
         return {countData: countD};
     }
 
