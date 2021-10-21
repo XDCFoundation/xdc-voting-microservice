@@ -111,21 +111,7 @@ export default class FamilyController {
       httpConstants.RESPONSE_CODES.OK
     );
   }
-  async searchProposalUsingName(request, response) {
-    const [error, getRes] = await Utils.parseResponse(
-      new BLManager().searchProposalUsingName(request.body)
-    );
-    if (!getRes) {
-      return Utils.handleError(error, request, response);
-    }
-    return Utils.response(
-      response,
-      getRes,
-      apiSuccessMessage.FETCH_SUCCESS,
-      httpConstants.RESPONSE_STATUS.SUCCESS,
-      httpConstants.RESPONSE_CODES.OK
-    );
-  }
+
   async castProposalVote(request, response) {
     const [error, getRes] = await Utils.parseResponse(
       new BLManager().castProposalVote(request.body)

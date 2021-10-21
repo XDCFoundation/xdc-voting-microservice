@@ -82,6 +82,7 @@ export const apiFailureMessage = {
   INVALID_SESSION_TOKEN: 'Invalid session token',
   INTERNAL_SERVER_ERROR: 'Internal server Error',
   BAD_REQUEST: 'Bad Request!',
+  NOT_FOUND: 'Not Found!',
   DEVICE_ID_OR_SESSION_TOKEN_EMPTY: 'Device id or session token can\'t be empty or null',
   SESSION_GENERATION: 'Unable to generate session!',
   SESSION_EXPIRED: 'Session Expired!',

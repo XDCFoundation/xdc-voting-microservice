@@ -419,16 +419,8 @@ export default class proposalController {
 
     //getSingleProposalDetail
     async getProposalDetail(req, res) {
-        let response = await new BLManager()
-            .getProposalDetail(req.params)
-            .catch((err) => {
-                return Utils.response(
-                    res,
-                    {err},
-                    apiFailureMessage.INTERNAL_SERVER_ERROR,
-                    httpConstants.RESPONSE_STATUS.FAILURE,
-                    httpConstants.RESPONSE_CODES.SERVER_ERROR
-                );
+        let response = await new BLManager().getProposalDetail(req.params).catch((err) => {
+                return Utils.response(res, {err}, apiFailureMessage.INTERNAL_SERVER_ERROR, httpConstants.RESPONSE_STATUS.FAILURE, httpConstants.RESPONSE_CODES.SERVER_ERROR);
             });
         if (!response)
             return Utils.response(
@@ -438,14 +430,7 @@ export default class proposalController {
                 httpConstants.RESPONSE_STATUS.FAILURE,
                 httpConstants.RESPONSE_CODES.NOT_FOUND
             );
-
-        return Utils.response(
-            res,
-            response,
-            apiSuccessMessage.FETCH_SUCCESS,
-            httpConstants.RESPONSE_STATUS.SUCCESS,
-            httpConstants.RESPONSE_CODES.OK
-        );
+        return Utils.response(res, response, apiSuccessMessage.FETCH_SUCCESS, httpConstants.RESPONSE_STATUS.SUCCESS, httpConstants.RESPONSE_CODES.OK);
     }
 
     //searchbyaddess
