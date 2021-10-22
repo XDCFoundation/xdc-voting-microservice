@@ -6,7 +6,6 @@ const addressSchema = new mongoose.Schema({
         allowVoting: { type: Boolean, default: true },
         allowProposalCreation: { type: Boolean, default: false },
     },
-    totalVotes: { type: Number, default: null },
     createdOn: { type: Number, default: Date.now() },
     updatedOn: { type: Number, default: Date.now() },
     isActive: { type: Boolean, default: true },

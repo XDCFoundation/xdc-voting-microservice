@@ -5,16 +5,15 @@ import {
     apiFailureMessage,
 } from "../../common/constants";
 
-import templateSchema from "../../models/modelTemplate";
+import AddressesSchema from "../../models/addresses";
 import VoteSchema from "../../models/votes";
 import proposalsSchema from "../../models/proposals";
 
 export default class BLManager {
     ///add_whitelist_address
-
     addAddress = async (requestData) => {
-        const proposalsModelObject = new templateSchema(requestData);
-        return await proposalsModelObject.saveData();
+        const addressesInstance = new AddressesSchema(requestData);
+        return await addressesInstance.addData();
     };
 
     async getAddress(requestData) {
@@ -138,9 +137,7 @@ export default class BLManager {
     }
 
     async getTotalCastVotes(requestData) {
-        const countD = await VoteSchema
-            .find({totalVotes: requestData.totalVotes})
-            .count();
+        const countD = await VoteSchema.find().count();
         return {countData: countD};
     }
 
