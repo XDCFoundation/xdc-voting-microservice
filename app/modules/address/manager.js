@@ -54,7 +54,7 @@ export default class BLManager {
                 apiFailureMessage.INVALID_PARAMS,
                 httpConstants.RESPONSE_CODES.FORBIDDEN
             );
-        return templateSchema.findOneAndDelete(
+        return templateSchema.deleteOne(
             {
                 address: request.address,
             },
