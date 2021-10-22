@@ -12,7 +12,7 @@ module.exports = (app) => {
   app.post("/add-address", new Address().addAddress);
   app.post("/get-address", new Address().getAddress);
   app.post("/delete-address", new Address().deleteAddress);
-  app.put("/update-address", new Address().updateAddress);
+  app.post("/update-address", new Address().updateAddress);
   app.get("/getVotingPercentage/:proposalId", new Address().getVotingPercentage);
   app.get("/getAllVotersForProposal", new Address().getAllVotersForProposal);
   app.get("/getTotalCastVotes", new Address().getTotalCastVotes);
