@@ -16,7 +16,7 @@ export default class FamilyController {
     return Utils.response(
       response,
       getRes,
-      apiSuccessMessage.FETCH_SUCCESS,
+      "Data added successfully",
       httpConstants.RESPONSE_STATUS.SUCCESS,
       httpConstants.RESPONSE_CODES.OK
     );
@@ -46,7 +46,7 @@ export default class FamilyController {
     return Utils.response(
       response,
       getRes,
-      apiSuccessMessage.FETCH_SUCCESS,
+      "Data deleted successfully",
       httpConstants.RESPONSE_STATUS.SUCCESS,
       httpConstants.RESPONSE_CODES.OK
     );
@@ -61,7 +61,7 @@ export default class FamilyController {
     return Utils.response(
       response,
       getRes,
-      apiSuccessMessage.FETCH_SUCCESS,
+      "Data updated successfully",
       httpConstants.RESPONSE_STATUS.SUCCESS,
       httpConstants.RESPONSE_CODES.OK
     );
