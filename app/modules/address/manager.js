@@ -18,15 +18,15 @@ export default class BLManager {
 
     async getAddress(requestData) {
         const findObject = {isDeleted: false};
-        const countData = await templateSchema.countData();
-        const allAddress = await templateSchema.findData(
+        const countData = await AddressesSchema.countData();
+        const allAddress = await AddressesSchema.findData(
             findObject,
             requestData.limit,
             requestData.skip
         );
         return {countData: countData, allAddress: allAddress};
         // console.log("=========", response);
-        // const addressDetails = await templateSchema
+        // const addressDetails = await AddressesSchema
         //   .findData(requestData)
         //   .limit(parseInt(requestData.limit));
         // if (!addressDetails)
@@ -35,7 +35,7 @@ export default class BLManager {
         //     constants.modelMessage.DATA_EXIST,
         //     httpConstants.RESPONSE_CODES.NOT_FOUND
         //   );
-        // const totalCount = await templateSchema.countData();
+        // const totalCount = await AddressesSchema.countData();
         // console.log("this is ", totalCount);
         // addressDetails["totalRecord"] = "testdata";
         // return Utils.response(
@@ -53,7 +53,7 @@ export default class BLManager {
                 apiFailureMessage.INVALID_PARAMS,
                 httpConstants.RESPONSE_CODES.FORBIDDEN
             );
-        return templateSchema.findOneAndDelete(
+        return AddressesSchema.deleteOne(
             {
                 address: request.address,
             },
@@ -84,12 +84,12 @@ export default class BLManager {
             }
             if (request.totalVotes) addressDetails["totalVotes"] = request.totalVotes;
 
-            let findData = templateSchema.findOne({address: request.address,});
+            let findData = AddressesSchema.findOne({address: request.address,});
             if (!findData) {
                 throw "No such address exists";
             }
 
-            return templateSchema.findOneAndUpdate(
+            return AddressesSchema.findOneAndUpdate(
                 {
                     address: request.address,
                 },

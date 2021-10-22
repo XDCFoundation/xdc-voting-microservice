@@ -49,6 +49,6 @@ voteSchema.static({
   },
   countData: function (findObj) {
     return this.count(findObj);
-  },
+  }
 });
 module.exports = mongoose.model("votes", voteSchema);
