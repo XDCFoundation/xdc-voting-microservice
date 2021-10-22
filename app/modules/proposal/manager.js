@@ -213,7 +213,8 @@ export default class BLManager {
             {"$sort": {createdOn: -1}}
         ]
         query.push({"$skip": Number(requestData.skip)})
-        query.push({"$limit": Number(requestData.limit)})
+        if(requestData.limit)
+            query.push({"$limit": Number(requestData.limit)})
 
         const response = await addressSchema.aggregate(query);
         const newQuery = [{$count: "totalCount"}];
