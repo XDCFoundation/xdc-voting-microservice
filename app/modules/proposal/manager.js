@@ -201,13 +201,30 @@ export default class BLManager {
 
     //get-list-of-whitelisted-address
     async getListOfWhitelistedAddress(requestData) {
-        const sort = {createdOn: -1};
-        const countData = await addressSchema.count()
-        const list = await addressSchema.find()
-            .skip(parseInt(requestData.skip))
-            .limit(parseInt(requestData.limit))
-            .sort(sort)
-        return {count: countData, dataList: list}
+        const query = [
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "voterAddress",
+                    foreignField: "address",
+                    as: "votes"
+                }
+            },
+            {"$sort": {createdOn: -1}}
+        ]
+        query.push({"$skip": Number(requestData.skip)})
+        query.push({"$limit": Number(requestData.limit)})
+
+        const response = await addressSchema.aggregate(query);
+        const newQuery = [{$count: "totalCount"}];
+        const countObj = await addressSchema.aggregate(newQuery);
+        return {dataList:response,count:countObj[0].totalCount};
+        // const countData = await addressSchema.count()
+        // const list = await addressSchema.find()
+        //     .skip(parseInt(requestData.skip))
+        //     .limit(parseInt(requestData.limit))
+        //     .sort(sort)
+        // return {count: countData, dataList: list}
     }
 
 
