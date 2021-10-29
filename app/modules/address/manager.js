@@ -13,6 +13,7 @@ export default class BLManager {
     ///add_whitelist_address
     addAddress = async (requestData) => {
         const addressesInstance = new AddressesSchema(requestData);
+        addressesInstance.createdOn=Date.now();
         return await addressesInstance.save();
     };
 
