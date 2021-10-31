@@ -35,6 +35,13 @@ module.exports = {
     await validate(schema, req.params, res, next, req)
   },
 
+  validateVoteAddess: async (req, res, next) => {
+    const schema = yup.object().shape({
+      voterAddress: yup.string().required(),
+    })
+    await validate(schema, req.params, res, next, req)
+  },
+
   
 };
 

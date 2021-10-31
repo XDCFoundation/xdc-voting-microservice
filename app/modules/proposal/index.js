@@ -464,6 +464,37 @@ export default class proposalController {
         );
     }
 
+    // totalVotesByVoter
+    async totalVotesByVoter(req, res) {
+        let response = await new BLManager()
+            .totalVotesByVoter(req.params)
+            .catch((err) => {
+                return Utils.response(
+                    res,
+                    {err},
+                    apiFailureMessage.INTERNAL_SERVER_ERROR,
+                    httpConstants.RESPONSE_STATUS.FAILURE,
+                    httpConstants.RESPONSE_CODES.SERVER_ERROR
+                );
+            });
+        if (!response)
+            return Utils.response(
+                res,
+                {},
+                apiFailureMessage.NOT_FOUND,
+                httpConstants.RESPONSE_STATUS.FAILURE,
+                httpConstants.RESPONSE_CODES.NOT_FOUND
+            );
+
+        return Utils.response(
+            res,
+            response,
+            apiSuccessMessage.FETCH_SUCCESS,
+            httpConstants.RESPONSE_STATUS.SUCCESS,
+            httpConstants.RESPONSE_CODES.OK
+        );
+    }
+
 
     //deleteProposal
 

@@ -293,4 +293,10 @@ export default class BLManager {
     async searchbyaddess(requestData) {
         return addressSchema.findOne({address: requestData.address})
     }
+
+
+    async totalVotesByVoter(requestData){
+        return await voteSchema.find({voterAddress: requestData.voterAddress})
+        .count()
+    }
 }
