@@ -205,21 +205,23 @@ export default class BLManager {
             {
                 $lookup: {
                     from: "votes",
-                    localField: "voterAddress",
-                    foreignField: "address",
+                    localField: "address",
+                    foreignField: "voterAddress",
                     as: "votes"
                 }
+                
             },
             {"$sort": {createdOn: -1}}
         ]
         query.push({"$skip": Number(requestData.skip)})
         if(requestData.limit)
             query.push({"$limit": Number(requestData.limit)})
-
+        
         const response = await addressSchema.aggregate(query);
+       
         const newQuery = [{$count: "totalCount"}];
         const countObj = await addressSchema.aggregate(newQuery);
-        return {dataList:response,count:countObj[0].totalCount};
+        return  {dataList:response,count:countObj[0].totalCount};
         // const countData = await addressSchema.count()
         // const list = await addressSchema.find()
         //     .skip(parseInt(requestData.skip))
