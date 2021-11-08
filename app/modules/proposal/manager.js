@@ -9,6 +9,7 @@ const {
 const proposalsSchema = require("../../models/proposals");
 const voteSchema = require("../../models/votes");
 const addressSchema = require("../../models/addresses");
+const emailSchema = require("../../models/email")
 
 export default class BLManager {
     //xinfin-voting-add-new-proposal
@@ -300,5 +301,13 @@ export default class BLManager {
     async totalVotesByVoter(requestData){
         return await voteSchema.find({voterAddress: requestData.voterAddress})
         .count()
+    }
+
+    async addEmail(requestData){
+        if (!requestData)
+        throw "Invalid request";
+    const emailModelObject = new emailSchema(requestData);
+    emailModelObject.createdOn=Date.now();
+    return await emailModelObject.save();
     }
 }

@@ -35,8 +35,8 @@ module.exports = (app) => {
   app.get("/getProposalDetail/:proposalId",ValidationManger.validateProposalDetail,new Proposal().getProposalDetail);
   app.get("/searchbyaddess/:address",ValidationManger.validatesearchbyaddess,new Proposal().searchbyaddess);
   app.post("/castProposalVote", new Address().castProposalVote);
-  // totalVotesByVoter
   app.get("/totalVotesByVoter/:voterAddress",ValidationManger.validateVoteAddess,new Proposal().totalVotesByVoter);
+  app.post("/addEmail",ValidationManger.validateAddEmail,new Proposal().addEmail);
 
 
   // app.delete("/deleteProposal", new Proposal().deleteProposal);
