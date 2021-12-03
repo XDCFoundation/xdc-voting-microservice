@@ -130,7 +130,7 @@ export default class FamilyController {
 
   async addressSearch(request, response) {
     const [error, getRes] = await Utils.parseResponse(
-      new BLManager().addressSearch(request.params)
+      new BLManager().addressSearch(request.body)
     );
     if (!getRes) {
       return Utils.handleError(error, request, response);

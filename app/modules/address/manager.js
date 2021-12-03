@@ -156,9 +156,15 @@ export default class BLManager {
     };
 
     async addressSearch(requestData){
-        
+
            
         const searchData = await AddressesSchema.find({"address": requestData.address})
-        return {searchData}
+        if(!searchData[""]){
+         throw "No record found"
+        }
+        else{
+            return {searchData}
+        }
+        
     }
 }
