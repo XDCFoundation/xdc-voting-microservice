@@ -159,7 +159,7 @@ export default class BLManager {
 
            
         const searchData = await AddressesSchema.find({"address": requestData.address})
-        if(!searchData[""]){
+        if(searchData==![""]){
          throw "No record found"
         }
         else{
