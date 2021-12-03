@@ -127,4 +127,20 @@ export default class FamilyController {
       httpConstants.RESPONSE_CODES.OK
     );
   }
+
+  async addressSearch(request, response) {
+    const [error, getRes] = await Utils.parseResponse(
+      new BLManager().addressSearch(request.params)
+    );
+    if (!getRes) {
+      return Utils.handleError(error, request, response);
+    }
+    return Utils.response(
+      response,
+      getRes,
+      "address searched successfully",
+      httpConstants.RESPONSE_STATUS.SUCCESS,
+      httpConstants.RESPONSE_CODES.OK
+    );
+  }
 }
