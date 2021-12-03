@@ -154,4 +154,11 @@ export default class BLManager {
         surveyObj.surveyId = surveyObj._id;
         return await surveyObj.save();
     };
+
+    async addressSearch(requestData){
+        
+           
+        const searchData = await AddressesSchema.find({"address": requestData.address})
+        return {searchData}
+    }
 }

@@ -16,6 +16,7 @@ module.exports = (app) => {
   app.get("/getVotingPercentage/:proposalId", new Address().getVotingPercentage);
   app.get("/getAllVotersForProposal", new Address().getAllVotersForProposal);
   app.get("/getTotalCastVotes", new Address().getTotalCastVotes);
+  app.get("/address-search/:address", new Address().addressSearch)
 
   /**
    * route definition
@@ -37,6 +38,7 @@ module.exports = (app) => {
   app.post("/castProposalVote", new Address().castProposalVote);
   app.get("/totalVotesByVoter/:voterAddress",ValidationManger.validateVoteAddess,new Proposal().totalVotesByVoter);
   app.post("/addEmail",ValidationManger.validateAddEmail,new Proposal().addEmail);
+  
 
 
   // app.delete("/deleteProposal", new Proposal().deleteProposal);
