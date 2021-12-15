@@ -17,6 +17,7 @@ export default class BLManager {
         if (!requestData)
             throw "Invalid request";
         const proposalsModelObject = new proposalsSchema(requestData);
+        proposalsModelObject.createdOn=Date.now();
         return await proposalsModelObject.save();
     };
 
