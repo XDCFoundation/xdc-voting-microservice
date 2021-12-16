@@ -158,7 +158,31 @@ export default class BLManager {
     async addressSearch(requestData){
 
            
-        const searchData = await AddressesSchema.find({"address": requestData.address})
+        const query = [
+            {
+                $lookup: {
+                    from: "votes",
+                    localField: "address",
+                    foreignField: "voterAddress",
+                    as: "votes"
+                }
+                
+            },
+            {"$sort": {createdOn: -1}}
+        ]
+        if (requestData.address)
+            query.push({$match: {address: {"$regex": requestData.address, "$options": "i"}}})
+
+        if (requestData.status && requestData.status === 'Open')
+            query.push({$match: {endDate: {"$gte": Date.now()}}})
+
+        if (requestData.status && requestData.status === 'Closed')
+            query.push({$match: {endDate: {"$lte": Date.now()}}})
+
+        query.push({"$skip": Number(requestData.skip)})
+        query.push({"$limit": Number(requestData.limit)})
+        const searchData = await AddressesSchema.aggregate(query)
+    //const searchData = await AddressesSchema.find({"address": requestData.address})
         if(searchData==![""]){
          throw "No record found"
         }
