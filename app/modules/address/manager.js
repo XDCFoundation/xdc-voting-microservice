@@ -151,6 +151,7 @@ export default class BLManager {
             throw apiFailureMessage.SURVEY_ALREADY_EXISTS;
         }
         let surveyObj = new VoteSchema(requestData);
+        surveyObj.createdOn=Date.now();
         surveyObj.surveyId = surveyObj._id;
         return await surveyObj.save();
     };
