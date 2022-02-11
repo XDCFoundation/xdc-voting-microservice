@@ -195,7 +195,7 @@ export default class BLManager {
             const sort = {_id: -1};
             return await proposalsSchema.find(requestData).sort(sort);
         } catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     }
 
@@ -317,19 +317,17 @@ export default class BLManager {
     async addDocsToIpfs(requestData){
 
         try{
-            console.log("eeee",requestData.fileName)
             let fileName = (requestData.fileName).replace(/\s/g, '')
             let key = `${fileName}`;
             let content = fs.readFileSync(basedir + `/uploads/${fileName}`)
             let fileUploadToIPFSResponse = await this.addFileToIPFS(content, key);
-            console.log("kkkkk",fileUploadToIPFSResponse)
 
             fs.unlinkSync(basedir + `/uploads/${fileName}`)
             let ipfsUrl = Config.IPFS_HOST_URL + fileUploadToIPFSResponse.toString()
             return ipfsUrl
         }
         catch(err){
-            console.log(err);
+            throw new Error(err);
         }
     }
 
@@ -347,7 +345,7 @@ export default class BLManager {
             }
             return fileAdded.cid;
         } catch (error) {
-            console.log(error)
+            throw new Error(error);
         }
     }
 }
