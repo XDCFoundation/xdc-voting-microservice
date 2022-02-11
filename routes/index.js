@@ -6,6 +6,26 @@ import { stringConstants } from "../app/common/constants";
 import Address from "../app/modules/address";
 import Proposal from "../app/modules/proposal";
 import votes from "../app/models/votes";
+import fs from "fs";
+import multer from "multer";
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      if (!fs.existsSync('./uploads/')) {
+          fs.mkdirSync('./uploads/')
+      }
+      cb(null, './uploads/')
+  },
+  filename: async function (req, file, cb) {
+      await cb(null, file.originalname);
+  }
+});
+
+const upload = multer({storage: storage});
+
+
+
 
 module.exports = (app) => {
   app.get("/", (req, res) => res.send(stringConstants.SERVICE_STATUS_HTML));
@@ -38,6 +58,7 @@ module.exports = (app) => {
   app.post("/castProposalVote", new Address().castProposalVote);
   app.get("/totalVotesByVoter/:voterAddress",ValidationManger.validateVoteAddess,new Proposal().totalVotesByVoter);
   app.post("/addEmail",ValidationManger.validateAddEmail,new Proposal().addEmail);
+  app.post("/addDocs", upload.array('files'),new Proposal().addDocsToIpfs);
   
 
 

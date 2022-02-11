@@ -526,6 +526,35 @@ export default class proposalController {
             httpConstants.RESPONSE_CODES.OK
         );
     }
+    async addDocsToIpfs(req, res) {
+        let response = await new BLManager()
+            .addDocsToIpfs(req.body)
+            .catch((err) => {
+                return Utils.response(
+                    res,
+                    {err},
+                    apiFailureMessage.INTERNAL_SERVER_ERROR,
+                    httpConstants.RESPONSE_STATUS.FAILURE,
+                    httpConstants.RESPONSE_CODES.SERVER_ERROR
+                );
+            });
+        if (!response)
+            return Utils.response(
+                res,
+                {},
+                apiFailureMessage.NOT_FOUND,
+                httpConstants.RESPONSE_STATUS.FAILURE,
+                httpConstants.RESPONSE_CODES.NOT_FOUND
+            );
+
+        return Utils.response(
+            res,
+            response,
+            "file added to ipfs successfully",
+            httpConstants.RESPONSE_STATUS.SUCCESS,
+            httpConstants.RESPONSE_CODES.OK
+        );
+    }
 
 
 

@@ -1,5 +1,8 @@
+import fs from "fs";
+import ipfsClient from "ipfs-http-client";
 const Config = require("../../../config");
 const Utils = require("../../utils");
+
 //const { validateRequest } = require("../../../middleware/validation");
 const {
     httpConstants,
@@ -192,7 +195,7 @@ export default class BLManager {
             const sort = {_id: -1};
             return await proposalsSchema.find(requestData).sort(sort);
         } catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     }
 
@@ -310,5 +313,39 @@ export default class BLManager {
     const emailModelObject = new emailSchema(requestData);
     emailModelObject.createdOn=Date.now();
     return await emailModelObject.save();
+    }
+    async addDocsToIpfs(requestData){
+
+        try{
+            let fileName = (requestData.fileName).replace(/\s/g, '')
+            let key = `${fileName}`;
+            let content = fs.readFileSync(basedir + `/uploads/${fileName}`)
+            let fileUploadToIPFSResponse = await this.addFileToIPFS(content, key);
+
+            fs.unlinkSync(basedir + `/uploads/${fileName}`)
+            let ipfsUrl = Config.IPFS_HOST_URL + fileUploadToIPFSResponse.toString()
+            return ipfsUrl
+        }
+        catch(err){
+            throw new Error(err);
+        }
+    }
+
+    addFileToIPFS = async (file, path) => {
+        try {
+            const ipfs = await ipfsClient.create({
+                host: Config.IPFS_IP,
+                port: Config.IPFS_PORT,
+                protocol: Config.IPFS_PROTOCOL,
+            });
+
+            const fileAdded = await ipfs.add({path, content: file});
+            if (!fileAdded || !fileAdded.cid) {
+                throw "failed to upload file to IPFS"
+            }
+            return fileAdded.cid;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
