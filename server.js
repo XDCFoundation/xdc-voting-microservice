@@ -8,6 +8,7 @@ import { httpConstants } from "./app/common/constants";
 const app = new APP();
 require("./config/express")(app);
 global.lhtWebLog = Utils.lhtLog;
+global.basedir = __dirname
 
 class Server {
   static listen() {
