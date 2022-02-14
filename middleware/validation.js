@@ -12,11 +12,11 @@ module.exports = {
   },
   validateAddProposal: async (req, res, next) => {
     const schema = yup.object().shape({
-      proposalTitle: yup.string().required(),
+      // proposalTitle: yup.string().required(),
       startDate: yup.string().required(),
       endDate: yup.number().required(),
       pollingContract : yup.string().required(),
-      status : yup.string().required()
+      // status : yup.string().required()
     })
     await validate(schema, req.body, res, next, req)
   },
