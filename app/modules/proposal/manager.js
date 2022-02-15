@@ -213,7 +213,7 @@ export default class BLManager {
                     from: "votes",
                     localField: "_id",
                     foreignField: "voterAddressId",
-                    as: "votesData"
+                    as: "votes"
                 }
 
             },
