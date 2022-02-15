@@ -86,5 +86,6 @@ export const apiFailureMessage = {
   DEVICE_ID_OR_SESSION_TOKEN_EMPTY: 'Device id or session token can\'t be empty or null',
   SESSION_GENERATION: 'Unable to generate session!',
   SESSION_EXPIRED: 'Session Expired!',
-  SURVEY_ALREADY_EXISTS:'You already voted for this contract'
+  SURVEY_ALREADY_EXISTS:'You already voted for this contract',
+  USER_NOT_ALLOWED_TO_VOTE:"User doesn't have permission to vote"
 }

@@ -1,5 +1,6 @@
 import fs from "fs";
 import ipfsClient from "ipfs-http-client";
+
 const Config = require("../../../config");
 const Utils = require("../../utils");
 
@@ -20,7 +21,7 @@ export default class BLManager {
         if (!requestData)
             throw "Invalid request";
         const proposalsModelObject = new proposalsSchema(requestData);
-        proposalsModelObject.createdOn=Date.now();
+        proposalsModelObject.createdOn = Date.now();
         return await proposalsModelObject.save();
     };
 
@@ -210,23 +211,23 @@ export default class BLManager {
             {
                 $lookup: {
                     from: "votes",
-                    localField: "address",
-                    foreignField: "voterAddress",
-                    as: "votes"
+                    localField: "_id",
+                    foreignField: "voterAddressId",
+                    as: "votesData"
                 }
-                
+
             },
             {"$sort": {createdOn: -1}}
         ]
         query.push({"$skip": Number(requestData.skip)})
-        if(requestData.limit)
+        if (requestData.limit)
             query.push({"$limit": Number(requestData.limit)})
-        
         const response = await addressSchema.aggregate(query);
-       
+
         const newQuery = [{$count: "totalCount"}];
         const countObj = await addressSchema.aggregate(newQuery);
-        return  {dataList:response,count:countObj[0].totalCount};
+        return {dataList: response, count: countObj[0].totalCount};
+
         // const countData = await addressSchema.count()
         // const list = await addressSchema.find()
         //     .skip(parseInt(requestData.skip))
@@ -302,21 +303,22 @@ export default class BLManager {
     }
 
 
-    async totalVotesByVoter(requestData){
+    async totalVotesByVoter(requestData) {
         return await voteSchema.find({voterAddress: requestData.voterAddress})
-        .count()
+            .count()
     }
 
-    async addEmail(requestData){
+    async addEmail(requestData) {
         if (!requestData)
-        throw "Invalid request";
-    const emailModelObject = new emailSchema(requestData);
-    emailModelObject.createdOn=Date.now();
-    return await emailModelObject.save();
+            throw "Invalid request";
+        const emailModelObject = new emailSchema(requestData);
+        emailModelObject.createdOn = Date.now();
+        return await emailModelObject.save();
     }
-    async addDocsToIpfs(requestData){
 
-        try{
+    async addDocsToIpfs(requestData) {
+
+        try {
             let fileName = (requestData.fileName).replace(/\s/g, '')
             let key = `${fileName}`;
             let content = fs.readFileSync(basedir + `/uploads/${fileName}`)
@@ -325,8 +327,7 @@ export default class BLManager {
             fs.unlinkSync(basedir + `/uploads/${fileName}`)
             let ipfsUrl = Config.IPFS_HOST_URL + fileUploadToIPFSResponse.toString()
             return ipfsUrl
-        }
-        catch(err){
+        } catch (err) {
             throw new Error(err);
         }
     }

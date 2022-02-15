@@ -150,6 +150,13 @@ export default class BLManager {
         if (votersResponse && votersResponse.length) {
             throw apiFailureMessage.SURVEY_ALREADY_EXISTS;
         }
+
+        let addressRes = await AddressesSchema.findData({address: requestData.voterAddress.toLowerCase()});
+        console.log("addressRes ",JSON.parse(JSON.stringify(addressRes)))
+        if (!addressRes || !addressRes.length || !addressRes[0].permission || !addressRes[0].permission.allowVoting) {
+            throw apiFailureMessage.USER_NOT_ALLOWED_TO_VOTE;
+        }
+        requestData.voterAddressId = addressRes[0]._id;
         let surveyObj = new VoteSchema(requestData);
         surveyObj.createdOn=Date.now();
         surveyObj.surveyId = surveyObj._id;
