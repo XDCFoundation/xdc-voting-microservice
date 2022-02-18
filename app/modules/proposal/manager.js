@@ -1,5 +1,6 @@
 import fs from "fs";
 import ipfsClient from "ipfs-http-client";
+import * as constants from "constants";
 
 const Config = require("../../../config");
 const Utils = require("../../utils");
@@ -90,9 +91,10 @@ export default class BLManager {
 
         const countQuery = [...query, {$count: "totalCount"}]
         const countData = await proposalsSchema.aggregate(countQuery)
-
-        query.push({"$skip": Number(requestData.skip)})
-        query.push({"$limit": Number(requestData.limit)})
+        if (requestData.skip || requestData.skip == 0)
+            query.push({"$skip": Number(requestData.skip)})
+        if (requestData.limit)
+            query.push({"$limit": Number(requestData.limit)})
         const proposalList = await proposalsSchema.aggregate(query)
         return {proposalList, countData: countData[0].totalCount};
     }
@@ -174,20 +176,27 @@ export default class BLManager {
 
     //getTotalPassedProposal
     async getPassedProposal() {
-        const addressDetails = await proposalsSchema.findData({
-            pollingContract: "passed",
-        });
-        const countPassedProposal = await proposalsSchema.findData({
-            pollingContract: "passed",
-        }).count();
-        if (!addressDetails)
-            return Utils.handleError(
-                addressDetails,
-                constants.modelMessage.DATA_NOT_FOUND,
-                constants.httpConstants.RESPONSE_CODES.FORBIDDEN
-            );
 
-        return await {addressDetails, countPassedProposal};
+        let proposals = await this.getProposalList({skip:0, limit:0});
+        proposals.proposalList = proposals.proposalList.map(proposal => {
+            if(proposal.endDate >= Date.now() && proposal.yesVotes > proposal.noVotes)
+                return proposal;
+        })
+        return proposals.proposalList.length
+        // const addressDetails = await proposalsSchema.findData({
+        //     pollingContract: "passed",
+        // });
+        // const countPassedProposal = await proposalsSchema.findData({
+        //     pollingContract: "passed",
+        // }).count();
+        // if (!addressDetails)
+        //     return Utils.handleError(
+        //         addressDetails,
+        //         constants.modelMessage.DATA_NOT_FOUND,
+        //         constants.httpConstants.RESPONSE_CODES.FORBIDDEN
+        //     );
+
+        // return await {addressDetails, countPassedProposal};
     }
 
     //getPaginatedProposalList
@@ -328,6 +337,7 @@ export default class BLManager {
             let ipfsUrl = Config.IPFS_HOST_URL + fileUploadToIPFSResponse.toString()
             return ipfsUrl
         } catch (err) {
+            console.log("err ")
             throw new Error(err);
         }
     }

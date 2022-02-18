@@ -274,15 +274,6 @@ export default class proposalController {
 
     //getTotalPassedProposal
     async getPassedProposal(req, res) {
-        if (!req || !req.body || Object.keys(req.body).length < 1)
-            return Utils.response(
-                res,
-                {},
-                apiFailureMessage.INVALID_REQUEST,
-                httpConstants.RESPONSE_STATUS.FAILURE,
-                httpConstants.RESPONSE_CODES.BAD_REQUEST
-            );
-
         let response = await new BLManager()
             .getPassedProposal(req.body)
             .catch((err) => {

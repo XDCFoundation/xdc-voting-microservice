@@ -1,5 +1,5 @@
 /**
- * Created by AyushK on 18/09/20.
+ * Created by Anurag on 18/09/20.
  */
 import * as ValidationManger from "../middleware/validation";
 import { stringConstants } from "../app/common/constants";
@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
       cb(null, './uploads/')
   },
   filename: async function (req, file, cb) {
-      await cb(null, file.originalname);
+      await cb(null, file.originalname.replace(/\s/g, ''));
   }
 });
 
