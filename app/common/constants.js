@@ -87,5 +87,6 @@ export const apiFailureMessage = {
   SESSION_GENERATION: 'Unable to generate session!',
   SESSION_EXPIRED: 'Session Expired!',
   SURVEY_ALREADY_EXISTS:'You already voted for this contract',
+  ADDRESS_ALREADY_EXISTS:'Address already exists',
   USER_NOT_ALLOWED_TO_VOTE:"User doesn't have permission to vote"
 }

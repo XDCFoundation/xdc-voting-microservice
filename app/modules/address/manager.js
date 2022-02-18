@@ -12,8 +12,13 @@ import proposalsSchema from "../../models/proposals";
 export default class BLManager {
     ///add_whitelist_address
     addAddress = async (requestData) => {
+
+        const addressDetails = await AddressesSchema.find({address: requestData.address, isDeleted: false})
+        console.log('addressDetails ',addressDetails)
+        if (addressDetails && addressDetails.length)
+            throw Utils.error({}, apiFailureMessage.ADDRESS_ALREADY_EXISTS, httpConstants.RESPONSE_CODES.BAD_REQUEST);
         const addressesInstance = new AddressesSchema(requestData);
-        addressesInstance.createdOn=Date.now();
+        addressesInstance.createdOn = Date.now();
         return await addressesInstance.save();
     };
 
@@ -107,18 +112,18 @@ export default class BLManager {
     }
 
     async getVotingPercentage(responseData) {
-        if(!responseData.proposalId)
+        if (!responseData.proposalId)
             throw "proposalId is required"
         const notSupported = await VoteSchema.countData({support: false, pollingContract: responseData.proposalId});
         const Supported = await VoteSchema.countData({support: true, pollingContract: responseData.proposalId});
         let totalVotes = notSupported + Supported;
-        if(totalVotes==0){
-            totalVotes=totalVotes+1
+        if (totalVotes == 0) {
+            totalVotes = totalVotes + 1
         }
-        let voteSupport=Supported / totalVotes
-        let voteNotSupport=notSupported / totalVotes
-        
-        
+        let voteSupport = Supported / totalVotes
+        let voteNotSupport = notSupported / totalVotes
+
+
         let supportpercentage = {
             yes: voteSupport * 100,
             No: voteNotSupport * 100,
@@ -152,20 +157,20 @@ export default class BLManager {
         }
 
         let addressRes = await AddressesSchema.findData({address: requestData.voterAddress.toLowerCase()});
-        console.log("addressRes ",JSON.parse(JSON.stringify(addressRes)))
+        console.log("addressRes ", JSON.parse(JSON.stringify(addressRes)))
         if (!addressRes || !addressRes.length || !addressRes[0].permission || !addressRes[0].permission.allowVoting) {
             throw apiFailureMessage.USER_NOT_ALLOWED_TO_VOTE;
         }
         requestData.voterAddressId = addressRes[0]._id;
         let surveyObj = new VoteSchema(requestData);
-        surveyObj.createdOn=Date.now();
+        surveyObj.createdOn = Date.now();
         surveyObj.surveyId = surveyObj._id;
         return await surveyObj.save();
     };
 
-    async addressSearch(requestData){
+    async addressSearch(requestData) {
 
-           
+
         const query = [
             {
                 $lookup: {
@@ -174,7 +179,7 @@ export default class BLManager {
                     foreignField: "voterAddress",
                     as: "votes"
                 }
-                
+
             },
             {"$sort": {createdOn: -1}}
         ]
@@ -190,13 +195,12 @@ export default class BLManager {
         query.push({"$skip": Number(requestData.skip)})
         query.push({"$limit": Number(requestData.limit)})
         const searchData = await AddressesSchema.aggregate(query)
-    //const searchData = await AddressesSchema.find({"address": requestData.address})
-        if(searchData==![""]){
-         throw "No record found"
-        }
-        else{
+        //const searchData = await AddressesSchema.find({"address": requestData.address})
+        if (searchData == ![""]) {
+            throw "No record found"
+        } else {
             return {searchData}
         }
-        
+
     }
 }
