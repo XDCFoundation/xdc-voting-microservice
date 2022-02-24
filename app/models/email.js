@@ -16,7 +16,13 @@ emailSchema.method({
 });
 
 emailSchema.static({
-
+    getFilteredData: function (requestData={}, selectionKeys="", offset=0, limit=0, sortingKey=0) {
+        return this.find(requestData, selectionKeys)
+            .sort(sortingKey)
+            .skip(parseInt(offset))
+            .limit(parseInt(limit))
+            .exec();
+    },
     findData: function (findObj) {
         return this.find(findObj)
     },

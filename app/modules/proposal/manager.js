@@ -4,6 +4,7 @@ import * as constants from "constants";
 
 const Config = require("../../../config");
 const Utils = require("../../utils");
+import OneSignal from "../../service/oneSignal"
 
 //const { validateRequest } = require("../../../middleware/validation");
 const {
@@ -23,8 +24,23 @@ export default class BLManager {
             throw "Invalid request";
         const proposalsModelObject = new proposalsSchema(requestData);
         proposalsModelObject.createdOn = Date.now();
+        this.sendNewProposalAlerts(requestData.pollingContract);
         return await proposalsModelObject.save();
     };
+
+    async sendNewProposalAlerts(pollingContract){
+        let emailIds = await emailSchema.getFilteredData({isDeleted: false},"email -_id")
+        const emailIdsArray = []
+        if(emailIds && emailIds.length)
+            emailIds.filter(obj => {
+                if(obj.email.trim()) {
+                    emailIdsArray.push(obj.email)
+                    return obj.email;
+                }
+            })
+        await OneSignal.sendNotification(emailIdsArray, pollingContract)
+        return true;
+    }
 
     //get-list-of-proposals
     async getProposalList(requestData) {
@@ -313,15 +329,16 @@ export default class BLManager {
 
 
     async totalVotesByVoter(requestData) {
-        return await voteSchema.find({voterAddress: requestData.voterAddress})
-            .count()
+        return voteSchema.find({voterAddress: requestData.voterAddress}).count()
     }
 
     async addEmail(requestData) {
-        if (!requestData)
-            throw "Invalid request";
+        if (!requestData) throw "Invalid request";
         const emailModelObject = new emailSchema(requestData);
         emailModelObject.createdOn = Date.now();
+        const oneSignalRes = await OneSignal.createEmailRecord(requestData.email).catch(err=>{
+            throw "Unable to add email to onesignal";
+        });
         return await emailModelObject.save();
     }
 
