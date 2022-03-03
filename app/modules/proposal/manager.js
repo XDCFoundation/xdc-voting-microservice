@@ -250,8 +250,9 @@ export default class BLManager {
         const response = await addressSchema.aggregate(query);
 
         const newQuery = [{$count: "totalCount"}];
+        console.log("Check point 1")
         const countObj = await addressSchema.aggregate(newQuery);
-        return {dataList: response, count: countObj[0].totalCount};
+        return {dataList: response, count: countObj && countObj.length ? countObj[0].totalCount : 0};
 
         // const countData = await addressSchema.count()
         // const list = await addressSchema.find()
