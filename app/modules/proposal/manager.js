@@ -247,6 +247,7 @@ export default class BLManager {
         query.push({"$skip": Number(requestData.skip)})
         if (requestData.limit)
             query.push({"$limit": Number(requestData.limit)})
+        console.log("Check point 0")
         const response = await addressSchema.aggregate(query);
 
         const newQuery = [{$count: "totalCount"}];
