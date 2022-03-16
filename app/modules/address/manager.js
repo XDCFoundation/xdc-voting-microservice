@@ -192,6 +192,8 @@ export default class BLManager {
         if (requestData.status && requestData.status === 'Closed')
             query.push({$match: {endDate: {"$lte": Date.now()}}})
 
+            const totalSearchData = await AddressesSchema.aggregate(query)
+
         query.push({"$skip": Number(requestData.skip)})
         query.push({"$limit": Number(requestData.limit)})
         const searchData = await AddressesSchema.aggregate(query)
@@ -199,7 +201,10 @@ export default class BLManager {
         if (searchData == ![""]) {
             throw "No record found"
         } else {
-            return {searchData}
+            return {
+                searchCount:totalSearchData.length,
+               data:searchData}
+               
         }
 
     }
