@@ -1,5 +1,9 @@
 import Config from "../../config"
 import httpService from "../service/http-service"
+import pug from "pug";
+import fs from "fs"
+
+
 
 const VARS = {ONESIGNAL_APP_ID: Config.ONE_SIGNAL_APP_ID, ONESIGNAL_APP_REST_API_KEY: Config.ONE_SIGNAL_API_KEY};
 
@@ -48,8 +52,12 @@ const sendNotification = function(emailIds, proposalAddress) {
 
     const message = {
         app_id: Config.ONE_SIGNAL_APP_ID,
-        "email_subject": "New proposal Alert",
-        "email_body":`New proposal ${proposalAddress} has been created`,
+        "email_subject": "New Proposal Posted",
+        // description: pug.renderFile(basedir + "/views/emailTemplate.pug"
+    
+        //   ),
+        // "email_body":`New proposal ${proposalAddress} has been created`,
+        "email_body":pug.renderFile(basedir + "/views/emailTemplate.pug"),
         include_email_tokens: emailIds
     };
 
@@ -73,7 +81,10 @@ const sendNotification = function(emailIds, proposalAddress) {
         console.log("ERROR:");
         console.log(e);
     });
-
+   
+    fs.writeFileSync("test.html",message.description)
+    
+    
     req.write(JSON.stringify(message));
     req.end();
 };

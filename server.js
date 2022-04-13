@@ -9,7 +9,7 @@ const app = new APP();
 require("./config/express")(app);
 global.lhtWebLog = Utils.lhtLog;
 global.basedir = __dirname
-
+app.set("view engine", "pug");
 class Server {
   static listen() {
     Promise.all([DBConnection.connect()])
