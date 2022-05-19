@@ -32,12 +32,11 @@ module.exports = (app) => {
   app.post('/add-address-group',ValidationManger.validateAddressGroup ,new Manager().addGroup);
   app.get('/get-groups',new Manager().getGroups);
   app.post('/update-address-group',ValidationManger.validateUpdateGroup,new Manager().updateAddressGroup);
-  app.post("/delete-address-group",ValidationManger.validateUpdateGroup,new Manager().deleteGroup);
+  // app.post("/delete-address-group",ValidationManger.validateUpdateGroup,new Manager().deleteGroup);
 
 
   
   app.get("/", (req, res) => res.send(stringConstants.SERVICE_STATUS_HTML));
-  app.post("/get-address", new Address().getAddress);
   app.post("/delete-address", new Address().deleteAddress);
   app.post("/update-address", new Address().updateAddress);
   app.get("/getVotingPercentage/:proposalId", new Address().getVotingPercentage);

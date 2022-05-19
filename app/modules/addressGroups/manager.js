@@ -51,13 +51,13 @@ export default class BLManager {
        
     }
 
-    async deleteAddressGroups(request) {
+    // async deleteAddressGroups(request) {
 
-        return addressGroups.updateOne({_id: request._id }, {
-         $pull: { 'addresses': request.addresses}
+    //     return addressGroups.updateOne({_id: request._id }, {
+    //      $pull: { 'addresses': request.addresses}
 
-        });
+    //     });
 
-      }
+    //   }
 
 }

@@ -53,20 +53,20 @@ export default class Manager {
       httpConstants.RESPONSE_CODES.OK
     );
   }
-  async deleteGroup(request, response) {
-    const [error, getRes] = await Utils.parseResponse(
-      new BLManager().deleteAddressGroups(request.body)
-    );
-    if (!getRes) {
-      return Utils.handleError(error, request, response);
-    }
-    return Utils.response(
-      response,
-      getRes,
-      "Data deleted successfully",
-      httpConstants.RESPONSE_STATUS.SUCCESS,
-      httpConstants.RESPONSE_CODES.OK
-    );
-  }
+  // async deleteGroup(request, response) {
+  //   const [error, getRes] = await Utils.parseResponse(
+  //     new BLManager().deleteAddressGroups(request.body)
+  //   );
+  //   if (!getRes) {
+  //     return Utils.handleError(error, request, response);
+  //   }
+  //   return Utils.response(
+  //     response,
+  //     getRes,
+  //     "Data deleted successfully",
+  //     httpConstants.RESPONSE_STATUS.SUCCESS,
+  //     httpConstants.RESPONSE_CODES.OK
+  //   );
+  // }
   
 }
