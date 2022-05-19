@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const addressGroupsSchema = new mongoose.Schema({
     name :{type :String ,default:" " },
-    addressess: { type: Array, default: [] },
+    addresses: { type: Array, default: [] },
     addedBy:{type: mongoose.Schema.Types.ObjectId, ref: 'us-users'},
     updatedBy:{type: mongoose.Schema.Types.ObjectId, ref: 'us-users'},
     addedOn: { type: Number, default: new Date().getTime() },

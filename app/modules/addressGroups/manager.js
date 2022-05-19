@@ -10,7 +10,7 @@ export default class BLManager {
     addNewGroup = async (requestData) => {
 
         const addressDetails = await addressGroups.find({name: requestData.name, isDeleted: false})
-        console.log('addressDetails ',addressDetails)
+    
         if (addressDetails && addressDetails.length)
             throw Utils.error({}, apiFailureMessage.GROUP_ALREADY_EXISTS, httpConstants.RESPONSE_CODES.BAD_REQUEST);
         const addressesInstance = new addressGroups(requestData);
@@ -18,15 +18,18 @@ export default class BLManager {
     };
 
 
-    addNewAddress = async (requestData) => {
+    updateAddressGroup = async (requestData) => {
 
         const addressDetails = await addressGroups.findOne({_id: requestData._id, isDeleted: false})
         if(!addressDetails)
            throw Utils.error({}, apiFailureMessage.GROUP_NOT_FOUND, httpConstants.RESPONSE_CODES.NOT_FOUND);
-    
+     
+        //  return addressGroups.updateData({_id : requestData._id},{...addressDetails.addressess,addresses: requestData.addresses,isDeleted:false})
+          return addressGroups.updateOne({_id : requestData._id},{$push: {addresses: requestData.addresses}})
       
-       return await addressGroups.updateOne({_id: requestData._id}, {'$set': requestData,addressess:[...addressDetails.addressess,requestData.addressess]}, {multi: true})
-           // if (addressDetails.addressess.includes(requestData.addressess))
+    //    return await addressGroups.updateOne({_id: requestData._id}, {'$set': requestData,addressess:[...addressDetails.addressess,requestData.addressess]}, {multi: true})
+         
+       // if (addressDetails.addressess.includes(requestData.addressess))
         //      throw Utils.error({}, apiFailureMessage.ADDRESS_ALREADY_EXISTS, httpConstants.RESPONSE_CODES.BAD_REQUEST);
         // return await addressGroups.findOneAndUpdate({ name:requestData.name }, {addressess:[...addressDetails.addressess,requestData.addressess] });
          
@@ -51,7 +54,7 @@ export default class BLManager {
     async deleteAddressGroups(request) {
 
         return addressGroups.updateOne({_id: request._id }, {
-         $pull: { 'addressess': request.addressess}
+         $pull: { 'addresses': request.addresses}
 
         });
 

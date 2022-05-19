@@ -70,7 +70,7 @@ export const apiSuccessMessage = {
   GET_PROPOSALS_SUCCESS:" Proposals fetched successfully",
   FETCH_SUCCESS: 'Information fetched successfully',
   ADD_SUCCESS:"added successfully",
-  ADD_ADDRESS_SUCCESS:"addedd address successfully"
+  ADD_ADDRESS_SUCCESS:"address added successfully"
 }
 
 export const apiEndpoints = {
