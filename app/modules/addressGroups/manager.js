@@ -24,14 +24,18 @@ export default class BLManager {
         if(!addressDetails)
            throw Utils.error({}, apiFailureMessage.GROUP_NOT_FOUND, httpConstants.RESPONSE_CODES.NOT_FOUND);
      
-        //  return addressGroups.updateData({_id : requestData._id},{...addressDetails.addressess,addresses: requestData.addresses,isDeleted:false})
-          return addressGroups.updateOne({_id : requestData._id},{$push: {addresses: requestData.addresses}})
-      
-    //    return await addressGroups.updateOne({_id: requestData._id}, {'$set': requestData,addressess:[...addressDetails.addressess,requestData.addressess]}, {multi: true})
-         
-       // if (addressDetails.addressess.includes(requestData.addressess))
-        //      throw Utils.error({}, apiFailureMessage.ADDRESS_ALREADY_EXISTS, httpConstants.RESPONSE_CODES.BAD_REQUEST);
-        // return await addressGroups.findOneAndUpdate({ name:requestData.name }, {addressess:[...addressDetails.addressess,requestData.addressess] });
+        
+          return addressGroups.updateOne({_id : requestData._id},{addresses: requestData.addresses})
+
+
+
+
+
+      //  return addressGroups.updateData({_id : requestData._id},{...addressDetails.addressess,addresses: requestData.addresses,isDeleted:false})
+      //   return await addressGroups.updateOne({_id: requestData._id}, {'$set': requestData,addressess:[...addressDetails.addressess,requestData.addressess]}, {multi: true})
+      // if (addressDetails.addressess.includes(requestData.addressess))
+      //      throw Utils.error({}, apiFailureMessage.ADDRESS_ALREADY_EXISTS, httpConstants.RESPONSE_CODES.BAD_REQUEST);
+      // return await addressGroups.findOneAndUpdate({ name:requestData.name }, {addressess:[...addressDetails.addressess,requestData.addressess] });
          
     }; 
 
