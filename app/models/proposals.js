@@ -10,6 +10,14 @@ const proposalsSchema = new mongoose.Schema({
   // status: { type: String, default: "open" },
   createdOn: { type: Number, default: Date.now() },
   updatedOn: { type: Number, default: Date.now() },
+  whitelistAddressesForVote :{ type:Array, default :{}},
+  whitelistAddressForView :{ type:Array, default:{}},
+  userType: {
+    type: String,
+    enum : ['ANYONE','WHITELISTED'],
+    default: 'ANYONE'
+},
+
 });
 
 proposalsSchema.method({

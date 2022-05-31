@@ -47,6 +47,22 @@ module.exports = {
 
     })
     await validate(schema, req.body, res, next, req)
+  },
+
+  validateAddressGroup : async (req, res, next) => {
+    const schema = yup.object().shape({
+      name: yup.string().required(),
+
+    })
+    await validate(schema, req.body, res, next, req)
+  }, 
+
+  validateUpdateGroup : async (req, res, next) => {
+    const schema = yup.object().shape({
+      _id: yup.string().required(),
+
+    })
+    await validate(schema, req.body, res, next, req)
   }
   
 };

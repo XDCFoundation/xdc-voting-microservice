@@ -69,7 +69,8 @@ export const apiSuccessMessage = {
   ADD_PROPOSAL_SUCCESS:" Proposal added successfully",
   GET_PROPOSALS_SUCCESS:" Proposals fetched successfully",
   FETCH_SUCCESS: 'Information fetched successfully',
-  ADD_SUCCESS:"added successfully"
+  ADD_SUCCESS:"added successfully",
+  ADD_ADDRESS_SUCCESS:"address added successfully"
 }
 
 export const apiEndpoints = {
@@ -88,5 +89,8 @@ export const apiFailureMessage = {
   SESSION_EXPIRED: 'Session Expired!',
   SURVEY_ALREADY_EXISTS:'You already voted for this contract',
   ADDRESS_ALREADY_EXISTS:'Address already exists',
-  USER_NOT_ALLOWED_TO_VOTE:"User doesn't have permission to vote"
+  USER_NOT_ALLOWED_TO_VOTE:"User doesn't have permission to vote",
+  GROUP_ALREADY_EXISTS:'Group already exists',
+  GROUP_NOT_FOUND:'Group not found',
+  
 }
